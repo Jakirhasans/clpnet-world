@@ -1,43 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Coming Soon - clpnet.world</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coming Soon | clpnet.world</title>
   <style>
-    body {
-      background: linear-gradient(135deg, #4f46e5, #6366f1);
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 80px 20px;
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      height: 100vh;
+      background: linear-gradient(-45deg, #1e3a8a, #4f46e5, #6366f1, #8b5cf6);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      font-size: 1.2rem;
+      background: rgba(0, 0, 0, 0.05);
+      z-index: 2;
+    }
+
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: blink 2s infinite ease-in-out;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      z-index: 1;
+    }
+
     h1 {
-      font-size: 3.5rem;
-      margin-bottom: 20px;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     }
+
     p {
       font-size: 1.2rem;
       color: #e0e7ff;
+      margin-bottom: 2rem;
     }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
+
+    .email-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
+
+    input[type="email"] {
+      padding: 12px 16px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 320px;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+
+    input[type="email"]:focus {
+      box-shadow: 0 0 10px #fff;
+    }
+
+    button {
+      background-color: #ffffff;
+      color: #4f46e5;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e0e7ff;
+      transform: scale(1.05);
+    }
+
     footer {
-      margin-top: 3em;
+      text-align: center;
+      padding: 1rem;
       font-size: 0.9rem;
-      color: #cbd5e1;
+      background: rgba(0, 0, 0, 0.1);
+      color: #d1d5db;
+      z-index: 2;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🚀 Coming Soon</h1>
-    <p>We're working hard to launch <strong>clpnet.world</strong></p>
-    <p>Stay tuned for something amazing.</p>
-    <footer>© 2025 clpnet.world | Powered by Amazon SES</footer>
-  </div>
+
+  <!-- Star Background -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Header -->
+  <header>
+    <strong>🌐 clpnet.world</strong>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <h1>🚀 Launching Soon</h1>
+    <p>We’re working hard behind the scenes. Get ready for something awesome!</p>
+    <div class="email-box">
+      <input type="email" placeholder="Enter your email" />
+      <button>Notify Me</button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 clpnet.world | All rights reserved.
+  </footer>
+
+  <!-- Star Generator -->
+  <script>
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      starsContainer.appendChild(star);
+    }
+  </script>
 </body>
 </html>
