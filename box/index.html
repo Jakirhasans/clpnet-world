@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Article Layout with Reference Highlight</title>
+<style>
+  body { margin:0; font-family:'Segoe UI', sans-serif; background:#f9f9f9; }
+
+  /* ===== HEADER AREA ===== */
+  .header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    max-width:1200px;
+    margin:30px auto 0;
+    padding:0 20px;
+    gap:20px;
+  }
+
+  .header-left {
+    flex:1;
+    background:#fff;
+    padding:20px;
+    border-radius:6px;
+    box-sizing:border-box;
+  }
+
+  .header-right {
+    width:300px;  /* fixed width */
+    background:#fff;
+    padding:20px;
+    border-radius:6px;
+    box-sizing:border-box;
+  }
+
+  .header-left h1 { margin-top:0; color:#002060; font-size:20pt; }
+  .header-left h2 { font-size:12pt; margin-top:15px; }
+  .header-left p, .header-right p { font-size:10pt; line-height:1.4; }
+
+  /* ===== BODY AREA ===== */
+  .article-body {
+    display:flex;
+    justify-content:space-between;
+    max-width:1200px;
+    margin:20px auto 50px;
+    padding:0 20px;
+    gap:20px;
+  }
+
+  article { flex:1; background:#fff; padding:20px; border-radius:6px; box-sizing:border-box; }
+
+  /* ===== BODY RIGHT SIDEBAR ===== */
+  .article-body .sidebar {
+    width:300px; /* fixed width same as header-right */
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:15px;
+    position:sticky;
+    top:20px;
+    max-height:80vh;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    box-sizing:border-box;
+  }
+
+  .tabs { display:flex; margin-bottom:10px; }
+  .tab { flex:1; padding:8px; text-align:center; cursor:pointer; background:#eee; font-weight:bold; }
+  .tab.active { background:#333; color:#fff; }
+
+  .tab-content { display:none; flex:1; overflow-y:auto; }
+  .tab-content.active { display:block; }
+
+  .tab-content ul { list-style:none; padding:0; margin:0; }
+  .tab-content li { margin-bottom:8px; }
+  .tab-content a { color:#0077cc; text-decoration:none; }
+  .tab-content a:hover { text-decoration:underline; }
+
+  .ref-item { scroll-margin-top:60px; transition: background 1s ease; }
+
+  sup a { color:#0077cc; text-decoration:none; cursor:pointer; }
+
+  @media(max-width:900px){
+    .header-wrapper, .article-body { flex-direction:column; }
+    .article-body .sidebar { position:static; max-height:none; margin-top:20px; }
+    .header-right { width:100%; margin-top:20px; }
+    .article-body .sidebar { width:100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<section class="header-wrapper">
+  <div class="header-left">
+    <!-- Article Component Wrapper -->
+<div id="articleWrapperScoped" style="all: initial; font-family:'Segoe UI', sans-serif; display:block; margin-top:20px; margin-bottom:40px;">
+
+  <!-- Article Type & Access -->
+  <span style="font-size:11pt; display:flex; align-items:center; margin-top:0pt; margin-bottom:20pt;font-weight:bold;color:#002060;">
+    <img src="https://cdn-icons-png.flaticon.com/128/11413/11413281.png" 
+         alt="Article Icon" 
+         id="articleIcon"
+         style="height:20px; width:auto; margin-right:6px;">
+    <span id="articleText" style="margin-left:0px;">Article Information</span>
+  </span>
+
+  <!-- Article Info & Crossmark -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0; margin-bottom: 3pt; font-size:10pt;">
+    <span>
+      Original Research Article | <span style="color:red;">Open Access</span> | <span style="color:black;">Peer Reviewed</span>
+    </span>
+    <span style="margin-right: 30px;">
+      <a href="https://crossmark.crossref.org/dialog/?doi=10.15640/jehd.v14p8" 
+         style="color:#0066cc; text-decoration:none; display:inline-flex; align-items:center;">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShdf07x0xc8Pgv2reGGcQjs93OR5xhP5Hl_Q&s" 
+             alt="update icon" 
+             style="width:20px; height:19px; margin-right:4px;">
+        Check for updates
+      </a>
+    </span>
+  </div>
+
+  <!-- Article Title -->
+  <p style="text-align: left; margin-top:20px; margin-bottom:20px;">
+      <span style="font-size:14pt; color:#002060; display:block; margin-bottom:8pt; font-weight:bold;">
+          Emotional Intelligence and Academic Performance Among College Students: A
+Quantitative Analysis
+
+
+
+      </span>
+  </p>
+
+  <!-- Author with ORCID -->
+  <div style="font-weight:bold; font-size:10pt; margin-top:10px; margin-bottom:20pt; text-align:left;">
+    <span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Darron Garner,
+    
+    
+  </span>
+
+<span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Jackson de Carvalho
+    
+    <a href="https://orcid.org/0009-0002-4622-3309" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:jndecarvalho@pvamu.edu" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="jndecarvalho@pvamu.edu">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>, and
+  </span>
+
+<span style="display:inline-flex; align-items:center; margin-right:12px;">
+    Beverly Spears
+    
+    
+  </span>
+    
+
+    
+  </div>
+
+  <!-- Abstract Heading -->
+  <span style="font-weight:bold;font-size:10pt;">Abstract</span>
+
+  <!-- Abstract Content -->
+  <span style="display:block; text-align: left; margin-top:10px; margin-bottom:24px;font-family:'Segoe UI';font-size:10pt;margin-right: 20px;">
+    Emotional intelligence (EI) is a vital concept in education, serving as the central focus of this study. EI is
+defined as the ability to effectively manage and express emotions with empathy while being acutely aware of
+their impact on interpersonal relationships. This study aims to explore the relationship between emotional
+intelligence and academic performance among undergraduate students. A sample of 200 participants was
+utilized to examine how five dimensions of EI—intrapersonal skills, interpersonal skills, adaptability, stress
+management, and general mood—correlate with both cumulative GPA and high school GPA. The results
+revealed statistically significant correlations between specific EI domains and academic performance,
+particularly highlighting the critical roles of stress management and general mood. These findings reinforce
+existing research suggesting that students with strong emotional intelligence skills tend to achieve better
+academic and extracurricular outcomes. Additionally, our study identified a significant gap in educational
+programs aimed at developing, supporting, and sustaining emotional intelligence within universities. We also
+examined demographic variables, including sex, age, and ethnicity, to assess their impact on differences
+among subgroups and their relationship with college retention. The findings carry practical implications for
+both educators and students, providing valuable insights that can inform the integration of EI competencies
+into academic support strategies in higher education, ultimately enhancing student success and well-being.
+  </span>
+
+  <!-- Scoped CSS for main sections -->
+  <style>
+    /* Main sections margin */
+    #articleWrapperScoped .main-section {
+      margin-bottom: 24px;
+    }
+    #articleWrapperScoped .cite-inline {
+      font-size:11pt; 
+      margin-top:20px; 
+      margin-bottom:20px; 
+      padding-top:5px; 
+      padding-bottom:5px;
+    }
+
+    /* Global link styling for normal text size, Segoe UI font */
+    #articleWrapperScoped a {
+      font-family: 'Segoe UI', sans-serif !important;
+      font-size:10pt !important;
+      text-decoration:none;
+      color:#0066cc;
+    }
+  </style>
+
+  <!-- Full Text Section -->
+  <div class="main-section">
+    <span style="font-family:'Segoe UI'; font-size:10pt;"> 
+      <span><strong>Full Text:</strong> <a href="https://jehd.thebrpi.org/journals/jehd/Vol_14_2025/8.pdf" target="_blank">PDF</a></span> &nbsp; | &nbsp; 
+      <span><strong>DOI:</strong> <a href="https://doi.org/10.15640/jehd.v14p8" target="_blank">https://doi.org/10.15640/jehd.v14p8</a></span>
+    </span>
+  </div>
+
+  <!-- Article History Section -->
+  <div class="main-section">
+    <span style="font-family:'Segoe UI'; font-size:10pt;"> <strong>Article History:</strong>
+    <div style="margin-top:10px;font-size:10pt;">
+      <span>
+        Received: 19 July 2025 | Accepted: 9 September
+2025 | Published: 16 September 2025
+      </span>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <div class="header-right">
+    <!-- Reviewer(s) Section -->
+ <div class="main-section">
+  <span style="font-family:'Segoe UI'; font-size:10pt; display:block; margin-bottom:10px; font-weight:bold;">
+    Reviewer(s):
+  </span>
+
+  <span style="text-align: left; line-height:1.4; font-size:10pt; display:block; margin-bottom:8px;">
+    Dr. Timothy Richards, McKendree University, 701 College Rd, Lebanon, IL 62254, United States.<br>
+    Email: <a href="mailto:trichard@mckendree.edu">trichard@mckendree.edu</a>
+  </span>
+
+  <span style="text-align: left; line-height:1.4; font-size:10pt; display:block; margin-bottom:0;">
+    Anahit Hakoupian, Ph.D., University of Southern California, Los Angeles, CA 90007, United States. ORCID iD: <a href="https://orcid.org/0009-0001-7397-5648" target="_blank">https://orcid.org/0009-0001-7397-5648</a>.<br>
+    Email: <a href="mailto:anahith@usc.edu">anahith@usc.edu</a>
+  </span>
+
+
+  
+</div>
+
+  <!-- Address for Correspondence Section -->
+  <div class="main-section">
+    <span style="font-family:'Segoe UI'; font-size:10pt; display:block; margin-bottom:10px; font-weight:bold;">Address for Correspondence:</span>
+    <span style="line-height:1.4;font-size:10pt;">
+      Jackson de Carvalho, Prairie View A&M University, Prairie View, Texas
+77466, United States of America.<br>
+      Email: <a href="jndecarvalho@pvamu.edu">jndecarvalho@pvamu.edu</a>
+    </span>
+  </div>
+
+  <!-- Cite this article -->
+  <div class="cite-inline adjustable-cite" style="font-size:10pt;">
+    <div style="font-family:'Segoe UI'; font-size:10pt;font-weight:bold; margin-bottom:10px;">Cite this article:</div>
+    <a href="#" class="open-cite" data-style="APA">APA</a>
+    <span style="margin:0 6px;">|</span>
+    <a href="#" class="open-cite" data-style="MLA">MLA</a>
+    <span style="margin:0 6px;">|</span>
+    <a href="#" class="open-cite" data-style="Chicago">Chicago</a>
+    <span style="margin:0 6px;">|</span>
+    <a href="#" class="open-cite" data-style="Harvard">Harvard</a>
+    <span style="margin:0 6px;">|</span>
+    <a href="#" class="open-cite" data-style="Vancouver">Vancouver</a>
+  </div>
+
+  <!-- Citation Modal -->
+  <div id="citeModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.4);">
+    <div class="modal-content" style="margin:10% auto; width:600px; padding:15px; background:#fff; border-radius:6px; position:relative; font-family:'Segoe UI'; font-size:10pt; line-height:1.4;">
+      <span class="close" style="float:right; font-size:20px; cursor:pointer;">&times;</span>
+      <h3 id="citationTitle" style="margin-top:0; font-size:13pt;"></h3>
+      <div id="citationBox" style="display:flex; align-items:flex-start; justify-content:space-between; border:1px solid #ddd; padding:10px; border-radius:5px;">
+        <div id="citationText" style="flex:1; word-wrap: break-word;"></div>
+        <button id="copyBtn" style="background:#28a745; color:#fff; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; margin-left:10px;">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Citation JS -->
+  <script>
+    const citations = {
+  APA: `Garner, D., de Carvalho, J., & Spears, B. (2025). Emotional Intelligence and Academic Performance Among College Students: A Quantitative Analysis. <em>Journal of Education and Human Development, 14</em>, 1-10. https://doi.org/10.15640/jehd.v14p8`,
+
+  MLA: `Garner, D., de Carvalho, J., and B. Spears. "Emotional Intelligence and Academic Performance Among College Students: A Quantitative Analysis." <em>Journal of Education and Human Development</em>, vol. 14, 2025, pp. 1-10. https://doi.org/10.15640/jehd.v14p8`,
+
+  Chicago: `Garner, D., de Carvalho, J., and B. Spears. "Emotional Intelligence and Academic Performance Among College Students: A Quantitative Analysis." <em>Journal of Education and Human Development</em> 14 (2025): 1-10. https://doi.org/10.15640/jehd.v14p8`,
+
+  Harvard: `Garner, D., de Carvalho, J., & Spears, B., 2025. Emotional Intelligence and Academic Performance Among College Students: A Quantitative Analysis. <em>Journal of Education and Human Development</em>, 14, pp.1-10. https://doi.org/10.15640/jehd.v14p8`,
+
+  Vancouver: `Garner D, de Carvalho J, Spears B. Emotional Intelligence and Academic Performance Among College Students: A Quantitative Analysis. <em>Journal of Education and Human Development</em>. 2025;14:1-10. https://doi.org/10.15640/jehd.v14p8`
+};
+
+
+
+    const modal = document.getElementById("citeModal");
+    const title = document.getElementById("citationTitle");
+    const text = document.getElementById("citationText");
+    const closeBtn = document.querySelector(".close");
+    const copyBtn = document.getElementById("copyBtn");
+
+    document.querySelectorAll(".open-cite").forEach(link => {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        const style = this.getAttribute("data-style");
+        title.textContent = style;
+        text.innerHTML = citations[style];
+        modal.style.display = "block";
+      });
+    });
+
+    closeBtn.onclick = () => { modal.style.display = "none"; };
+    window.onclick = (event) => { if(event.target == modal){ modal.style.display = "none"; } };
+
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(text.innerText).then(() => {
+        copyBtn.textContent = "Copied!";
+        setTimeout(() => { copyBtn.textContent = "Copy"; }, 2000);
+      });
+    });
+  </script>
+  
+  <!-- Article Metrics Section -->
+  <div class="main-section">
+    <span style="font-family:'Segoe UI'; font-size:10pt; display:block; margin-bottom:10px; font-weight:bold;">
+      Article Metrics (Citations):
+    </span>
+    <div style="font-family:'Segoe UI'; font-size:10pt; text-align:left; line-height:1.4; margin:0;">
+      For the most up-to-date citation information for this article, please refer to 
+      <a href="javascript:void(0);" target="_blank">Google Scholar</a>.<br>
+    </div>
+    <p style="font-family: 'Segoe UI'; font-size:10pt; color:#555555; font-style:italic; margin:5px 0;">
+      Note: Citation statistics will only be available once the article is indexed in Google Scholar.
+    </p>
+  </div>
+
+</div>
+  </div>
+</section>
+
+<!-- ===== MAIN BODY ===== -->
+<section class="article-body">
+  <article>
+    <h2 id="intro">1. Introduction</h2>
+    <p>Anita Brookner is celebrated for her incisive wit and elegantly restrained prose, as well as her penetrating portrayals of solitary, introspective women navigating the chasm between romantic idealism and disillusionment. Though Brookner herself eschewed the feminist label, her work has been widely lauded for its psychologically nuanced depictions of intelligent, often erudite women whose pursuit of self-fulfillment is subtly thwarted by internal insecurities, societal expectations, and the quiet cruelties of interpersonal dynamics.
+Central to Brookner’s oeuvre is a recurring archetype: the emotionally isolated woman of intellectual refinement. These characters—financially independent yet psychologically vulnerable, professionally accomplished yet perpetually self-doubting—exist in a state of quiet desolation. They are marked by a striking dissonance: keenly analytical minds juxtaposed with profound uncertainty about their physical appeal and social worth. Their lives, though outwardly orderly, are haunted by unrealized yearnings and a pervasive sense of having been sidelined by fate.
+In Hotel du Lac (1984), Brookner’s Booker Prize-winning novel, this archetype finds its most poignant expression in Edith Hope, a middle-aged romance novelist exiled to a tranquil Swiss hotel following a public romantic scandal. The novel unfolds as a masterclass in psychological subtlety, tracing Edith’s reluctant journey of self-reckoning through a narrative steeped in restraint and introspection. Brookner’s prose, spare yet luminous, mirrors the stark emotional landscape of her protagonist, whose retreat to the exclusiveHotel du Lac—a sanctuary for the emotionally wounded—becomes both a physical escape and a metaphorical descent into memory.
+Set against the muted backdrop of the hotel’s off-season lassitude, the story immerses readers in Edith’s world of quiet desperation. Through her interactions with the hotel’s eccentric guests—a self-centered and arrogant widow, a neglected aristocrat, and a pragmatically detached suitor—Edith is compelled to confront the unresolved tensions of her past: her ambivalence toward romantic convention, her guilt over failed intimate relationships, and her fraught negotiation of autonomy and vulnerability. 
+Ultimately, Hotel du Lac transcends its narrow setting to pose broader questions about identity, agency, and the cost of emotional survival. In Edith Hope, Brookner crafts an anti-heroine for the ages—a woman whose quiet defiance and unflinching self-awareness elevate her private struggles into a profound meditation on the human condition. The novel stands as a testament to Brookner’s singular ability to find grandeur in quiet despair, transforming the muted tones of loneliness into a resonant exploration of what it means to live—and write—on the margins of one’s own life.
+<sup><a href="#ref1" class="intext-ref">[1]</a></sup></p>
+
+    <h2 id="lit">2. Literature Review</h2>
+    <p>Literature review text... <sup><a href="#ref2" class="intext-ref">[2]</a></sup></p>
+
+    <h2 id="meth">3. Methodology</h2>
+    <p>Methodology text... <sup><a href="#ref3" class="intext-ref">[3]</a></sup></p>
+
+    <h2 id="discuss">4. Discussion</h2>
+    <p>Discussion text... <sup><a href="#ref4" class="intext-ref">[4]</a></sup></p>
+  </article>
+
+  <aside class="sidebar">
+    <div class="tabs">
+      <div class="tab active" data-tab="sections">Sections</div>
+      <div class="tab" data-tab="refs">References</div>
+    </div>
+
+    <div class="tab-content active" id="sections">
+      <ul>
+        <li><a href="#intro">Introduction</a></li>
+        <li><a href="#lit">Literature Review</a></li>
+        <li><a href="#meth">Methodology</a></li>
+        <li><a href="#discuss">Discussion</a></li>
+      </ul>
+    </div>
+
+    <div class="tab-content" id="refs">
+      <ul>
+        <li id="ref1" class="ref-item">[1] Author A, 2025. Title. Journal Name.</li>
+        <li id="ref2" class="ref-item">[2] Author B, 2025. Title. Journal Name.</li>
+        <li id="ref3" class="ref-item">[3] Author C, 2025. Title. Journal Name.</li>
+        <li id="ref4" class="ref-item">[4] Author D, 2025. Title. Journal Name.</li>
+      </ul>
+    </div>
+  </aside>
+</section>
+
+<script>
+  // ===== Tab switching =====
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      tabs.forEach(t=>t.classList.remove('active'));
+      contents.forEach(c=>c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Sidebar anchor scroll
+  document.querySelectorAll('.sidebar a').forEach(link=>{
+    link.addEventListener('click', e=>{
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      target.scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  // In-text reference click with highlight
+  document.querySelectorAll('.intext-ref').forEach(ref=>{
+    ref.addEventListener('click', e=>{
+      e.preventDefault();
+      // Open References tab
+      tabs.forEach(t=>t.classList.remove('active'));
+      contents.forEach(c=>c.classList.remove('active'));
+      document.querySelector('.tab[data-tab="refs"]').classList.add('active');
+      document.getElementById('refs').classList.add('active');
+      // Scroll to reference
+      const target = document.querySelector(ref.getAttribute('href'));
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+      // Highlight reference temporarily
+      target.style.background = '#fffa90';
+      setTimeout(()=>{ target.style.background=''; }, 1500);
+    });
+  });
+</script>
+
+</body>
+</html>
