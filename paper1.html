@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Article Layout with Reference Highlight</title>
-<style>
-  body { 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLPNet Journal</title>
+  <style>
+  
+   body { 
     margin: 0; 
     font-family: 'Segoe UI', sans-serif!important; 
     background: #fff!important; /* header er background color e match */
@@ -359,13 +360,73 @@
 
 
 
+    /* ===== HEADER (scoped with .site-header) ===== */
+    .site-header {
+      background:#2c3e50;
+      color:#fff;
+      padding:15px 20px;
+      text-align:center;
+      box-shadow:0 2px 5px rgba(0,0,0,0.15);
+    }
+    .site-header h1 {
+      margin:0;
+      font-size:22px;
+      font-weight:600;
+    }
+    .site-header p {
+      margin:4px 0 0;
+      font-size:14px;
+      color:#ccc;
+    }
+    .site-nav {
+      margin-top:10px;
+    }
+    .site-nav a {
+      color:#ddd;
+      margin:0 12px;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+    }
+    .site-nav a:hover { color:#fff; }
 
-</style>
+    /* ===== FOOTER (scoped with .site-footer) ===== */
+    .site-footer {
+      background:#2c3e50;
+      color:#ccc;
+      text-align:center;
+      padding:12px;
+      font-size:14px;
+      position:fixed;
+      bottom:0;
+      left:0;
+      width:100%;
+      box-shadow:0 -2px 5px rgba(0,0,0,0.15);
+      z-index:1000;
+    }
+    .site-footer a {
+      color:#ccc;
+      text-decoration:none;
+    }
+    .site-footer a:hover { color:#fff; }
+  </style>
 </head>
 <body>
 
+  <!-- 🔹 Header -->
+  <header class="site-header">
+    <h1>CLPNet Journal</h1>
+    <p>Article Page - Advancing Knowledge in Education</p>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="https://www.clpnet.world/submission/">Submission</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
 
-<!-- ===== HEADER ===== -->
+  <!-- 🔹 Body (এখানে তুমি শুধু তোমার article body paste করবে) -->
+  
+  <!-- ===== HEADER ===== -->
 <section class="header-wrapper">
   <div class="header-left">
     
@@ -1811,6 +1872,12 @@ School of Medicine, the University of Jordan</span>
 </section>
 
 
+
+
+  <!-- 🔹 Footer -->
+  <footer class="site-footer">
+    © 2025 CLPNet Journal | <a href="https://clpnet.world">clpnet.world</a>
+  </footer>
 
 </body>
 </html>
