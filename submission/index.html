@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Article Submission</title>
+
+    <style>
+        /* Force Segoe UI everywhere */
+        html,
+        body,
+        input,
+        button,
+        textarea,
+        select,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span,
+        label,
+        div {
+            font-family: 'Segoe UI', sans-serif !important;
+        }
+
+        body {
+            background: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            background: inherit;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .form-container p {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .required {
+            color: red;
+        }
+
+        .form-container input,
+        .form-container textarea {
+            width: 100%;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #007bff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .file-upload {
+            padding: 5px;
+            font-size: 13px;
+        }
+
+        .word-counter {
+            font-size: 11px;
+            margin-top: 2px;
+            text-align: right;
+            color: #666;
+        }
+
+        .word-counter.exceeded {
+            color: red;
+            font-weight: 600;
+        }
+
+        /* Submit button */
+        button[type="submit"] {
+            position: relative;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+            display: block;
+            transition: background 0.3s;
+            overflow: hidden;
+        }
+
+        button[type="submit"]:hover {
+            background: #0056b3;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Success screen */
+        .success-screen {
+            display: none;
+            text-align: center;
+            margin-top: 120px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #28a745;
+            animation: slideFade 0.8s ease-in-out;
+            padding: 30px 20px;
+        }
+
+        .success-screen small {
+            display: block;
+            margin-top: 18px;
+            font-size: 15px;
+            color: #555;
+        }
+
+        /* Resubmit button */
+        .resubmit-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 4px 12px;
+            background: #28a745;
+            border-radius: 4px;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.2;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .resubmit-btn:hover {
+            background: #218838;
+        }
+
+        @keyframes slideFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ----- reCAPTCHA Mimic ----- */
+        .recaptcha-container {
+            position: relative;
+            width: 100%;
+            max-width: 250px;
+            border: 1px solid #d3d3d3;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: box-shadow 0.3s, border-color 0.3s;
+            margin: 15px 0;
+        }
+
+        .recaptcha-container:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .recaptcha-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+        }
+
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #d3d3d3;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner-captcha {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ccc;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        .checkbox.checked {
+            border-color: #007bff;
+            background: #007bff;
+        }
+
+        .checkbox.checked::after {
+            content: '';
+            position: absolute;
+            width: 7px;
+            height: 12px;
+            border: solid #fff;
+            border-width: 0 2.5px 2.5px 0;
+            transform: rotate(45deg);
+            top: 3px;
+            left: 7px;
+        }
+
+        .recaptcha-text {
+            font-size: 14px;
+            color: #555;
+            flex-grow: 1;
+        }
+
+        .protected-label {
+            font-size: 10px;
+            color: #777;
+            text-align: right;
+            padding: 2px 10px;
+            border-top: 1px solid #e3e3e3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Form Container -->
+    <div class="form-container" id="formContainer">
+        <div class="form-title">Online Article Submission</div>
+        <p>Please complete the form below to submit your manuscript. Fields marked with <span class="required">*</span> are required.</p>
+
+        <form id="submissionForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="author">Corresponding Author’s Name <span class="required">*</span></label>
+                <input type="text" id="author" name="author" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email1">Primary Email <span class="required">*</span></label>
+                <input type="email" id="email1" name="email1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email2">Alternative Email</label>
+                <input type="email" id="email2" name="email2">
+            </div>
+
+            <div class="form-group">
+                <label for="orcid">ORCID iD</label>
+                <input type="text" id="orcid" name="orcid" placeholder="0000-0000-0000-0000">
+            </div>
+
+            <div class="form-group">
+                <label for="allauthors">All Authors <span class="required">*</span></label>
+                <textarea id="allauthors" name="allauthors" placeholder="Enter all authors separated by commas" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Article Title <span class="required">*</span></label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="abstract">Abstract (Max 300 words) <span class="required">*</span></label>
+                <textarea id="abstract" name="abstract" placeholder="Write abstract here..." required></textarea>
+                <div id="wordCounter" class="word-counter">0 / 300 words</div>
+            </div>
+
+            <div class="form-group">
+                <label for="manuscript">Upload Manuscript (PDF/DOC/DOCX) <span class="required">*</span></label>
+                <input type="file" id="manuscript" name="manuscript" class="file-upload" accept=".pdf,.doc,.docx" required>
+            </div>
+
+            <!-- ===== Add reCAPTCHA Mimic ===== -->
+            <div class="recaptcha-container" id="recaptcha">
+                <div class="recaptcha-content">
+                    <div class="checkbox" id="checkbox">
+                        <div class="spinner-captcha" id="captchaSpinner"></div>
+                    </div>
+                    <div class="recaptcha-text">I am not a robot <span class="required"></span></div>
+                </div>
+                <div class="protected-label">Protected by reCAPTCHA</div>
+            </div>
+
+            <button type="submit">
+                <span class="btn-text">Submit Manuscript</span>
+                <span class="spinner" style="display:none;"></span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="successScreen" class="success-screen">
+        Thanks for submitting!
+        <small>We have received your manuscript.</small>
+        <button class="resubmit-btn" id="resubmitBtn">Resubmit</button>
+    </div>
+
+    <script>
+        // ----- Word Counter -----
+        const abstractField = document.getElementById("abstract");
+        const wordCounter = document.getElementById("wordCounter");
+        const maxWords = 300;
+
+        abstractField.addEventListener("input", () => {
+            const words = abstractField.value.trim().split(/\s+/).filter(Boolean);
+            const wordCount = words.length;
+            wordCounter.textContent = `${wordCount} / ${maxWords} words`;
+            wordCounter.classList.toggle("exceeded", wordCount > maxWords);
+        });
+
+        function checkWordLimit() {
+            const words = abstractField.value.trim().split(/\s+/).filter(Boolean);
+            if (words.length > maxWords) {
+                alert("Abstract exceeds 300 words. Please shorten it.");
+                return false;
+            }
+            return true;
+        }
+
+        // ----- Form & Submission -----
+        const form = document.getElementById("submissionForm");
+        const submitBtn = form.querySelector("button");
+        const btnText = submitBtn.querySelector(".btn-text");
+        const spinner = submitBtn.querySelector(".spinner");
+        const formContainer = document.getElementById("formContainer");
+        const successScreen = document.getElementById("successScreen");
+        const resubmitBtn = document.getElementById("resubmitBtn");
+
+        // ----- reCAPTCHA -----
+        const recaptcha = document.getElementById('recaptcha');
+        const checkbox = document.getElementById('checkbox');
+        const captchaSpinner = document.getElementById('captchaSpinner');
+        let verified = false;
+
+        recaptcha.addEventListener('click', (e) => {
+            if (verified) return; 
+            if (e.target.classList.contains('checkbox') || e.target.classList.contains('recaptcha-text')) {
+                captchaSpinner.style.display = 'block';
+                setTimeout(() => {
+                    captchaSpinner.style.display = 'none';
+                    checkbox.classList.add('checked');
+                    verified = true;
+                }, 1200);
+            }
+        });
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!checkWordLimit()) return;
+
+            if (!verified) {
+                alert("Please verify you are not a robot.");
+                return;
+            }
+
+            const file = document.getElementById("manuscript").files[0];
+            if (!file) {
+                alert("Select a file.");
+                return;
+            }
+
+            btnText.style.display = "none";
+            spinner.style.display = "inline-block";
+            submitBtn.disabled = true;
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const payload = {
+                    author: form.author.value,
+                    email1: form.email1.value,
+                    email2: form.email2.value,
+                    orcid: form.orcid.value,
+                    allAuthors: form.allauthors.value,
+                    title: form.title.value,
+                    abstract: form.abstract.value,
+                    fileName: file.name,
+                    fileType: file.type,
+                    fileBase64: reader.result.split(",")[1]
+                };
+
+                setTimeout(() => {
+                    formContainer.style.display = "none";
+                    successScreen.style.display = "block";
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                }, 3000);
+
+                try {
+                    await fetch("https://script.google.com/macros/s/AKfycbwsxrwOzBweS6vVMZ6JQyZWIu59tO3M0EO_X6ARLNcsikDZ4UXLjxpQJZW9yZ8hQQsMrQ/exec", {
+                        method: "POST",
+                        body: JSON.stringify(payload)
+                    });
+                } catch (err) {
+                    console.error("⚠️ Backend submission error: ", err.message);
+                } finally {
+                    btnText.style.display = "inline";
+                    btnText.textContent = "Submit Manuscript";
+                    spinner.style.display = "none";
+                    submitBtn.disabled = false;
+                }
+            };
+        });
+
+        resubmitBtn.addEventListener("click", () => {
+            successScreen.style.display = "none";
+            formContainer.style.display = "block";
+            form.reset();
+            verified = false;
+            checkbox.classList.remove('checked');
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+
+</body>
+</html>
