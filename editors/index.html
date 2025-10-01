@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Editors - Frontiers Style</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* CSS Variables & Global Styles */
+        :root {
+            --secondary-color: #0088aa; /* Frontiers Teal/Blue Accent */
+            --text-dark: #333;
+            --text-light: #fff;
+            --bg-white: #fff;
+            --bg-light-gray: #f9f9f9;
+            --border-color: #ddd;
+            --text-muted: #777;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F7F7F7;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* SEARCH BAR */
+        .editor-search-bar {
+            border: 1px solid var(--border-color);
+            padding: 10px 15px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .editor-search-bar input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1em;
+            padding-left: 10px;
+        }
+
+        .editor-search-bar i {
+            color: var(--text-muted);
+        }
+        
+        /* HEADER & FILTERS */
+        .editor-header h1 {
+            font-size: 1.8em;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .editor-filters {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .editor-filters .tabs button {
+            background: none;
+            border: none;
+            padding: 5px 0;
+            margin-right: 15px;
+            font-size: 0.95em;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .editor-filters .tabs button.active {
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--text-dark);
+        }
+        
+        .editor-filters select {
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: var(--text-dark);
+        }
+
+        /* EDITOR LIST SECTIONS */
+        .editor-section h2 {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .editor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* EDITOR CARD STYLE (CORE DESIGN) */
+        .editor-card {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: box-shadow 0.2s;
+        }
+        
+        .editor-card:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .editor-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--bg-light-gray);
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .editor-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .editor-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 0;
+        }
+
+        .editor-affiliation {
+            font-size: 0.9em;
+            color: var(--text-dark);
+            margin: 5px 0 10px;
+        }
+        
+        .editor-role {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            width: 100%;
+        }
+
+        .editor-role span {
+            display: block;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .editor-filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .editor-filters .tabs button {
+                margin-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="editor-search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search in this journal">
+        </div>
+        
+        <header class="editor-header">
+            <h1>51 editors</h1>
+            <div class="editor-filters">
+                <select class="role-filter">
+                    <option>Role</option>
+                    <option>Chief Editor</option>
+                    <option>Associate Editor</option>
+                </select>
+                <div class="tabs">
+                    <button>Most viewed</button>
+                    <button>Most publications</button>
+                    <button class="active">A - Z</button>
+                </div>
+            </div>
+        </header>
+
+        <section class="editor-section">
+            <h2>Chief Editors</h2>
+            <div class="editor-grid">
+                
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/1.jpg" alt="Katarína Polčíková">
+                    </div>
+                    <p class="editor-name">Katarína Polčíková</p>
+                    <p class="editor-affiliation">Biomedical Research Center, Slovak Academy of Sciences<br>Bratislava, Slovakia</p>
+                    <div class="editor-role">
+                        <span>Chief Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+                
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/2.jpg" alt="Juraj Kopacek">
+                    </div>
+                    <p class="editor-name">Juraj Kopacek</p>
+                    <p class="editor-affiliation">Institute of Strategy GAIS<br>Bratislava, Slovakia</p>
+                    <div class="editor-role">
+                        <span>Chief Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/3.jpg" alt="Chief Editor Placeholder">
+                    </div>
+                    <p class="editor-name">Mohammad E. Hussain</p>
+                    <p class="editor-affiliation">University of Dhaka<br>Dhaka, Bangladesh</p>
+                    <div class="editor-role">
+                        <span>Chief Editor</span>
+                        <span>Clinical Virology</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+        <section class="editor-section">
+            <h2>Associate Editors</h2>
+            <div class="editor-grid">
+                
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/4.jpg" alt="Changsun Choi">
+                    </div>
+                    <p class="editor-name">Changsun Choi</p>
+                    <p class="editor-affiliation">Chung-Ang University<br>Seoul, Republic of Korea</p>
+                    <div class="editor-role">
+                        <span>Associate Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+                
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/5.jpg" alt="Amir Ghorbani">
+                    </div>
+                    <p class="editor-name">Amir Ghorbani</p>
+                    <p class="editor-affiliation">National Institutes of Health (NIH)<br>Bethesda, United States</p>
+                    <div class="editor-role">
+                        <span>Associate Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+                
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/6.jpg" alt="Miroslav Gašpar">
+                    </div>
+                    <p class="editor-name">Miroslav Gašpar</p>
+                    <p class="editor-affiliation">Institute of Biology, Biomedical Research Center, Slovak Academy of Sciences<br>Bratislava, Slovakia</p>
+                    <div class="editor-role">
+                        <span>Associate Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/7.jpg" alt="Mohammad S. Hakim">
+                    </div>
+                    <p class="editor-name">Mohammad S. Hakim</p>
+                    <p class="editor-affiliation">Caspian University<br>Al-Maida, Saudi Arabia</p>
+                    <div class="editor-role">
+                        <span>Associate Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+                
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/8.jpg" alt="Ivan Kock">
+                    </div>
+                    <p class="editor-name">Ivan Kock</p>
+                    <p class="editor-affiliation">National Institute of Allergy and Infectious Diseases<br>Bethesda, United States</p>
+                    <div class="editor-role">
+                        <span>Associate Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/9.jpg" alt="Ivana Nemšoková">
+                    </div>
+                    <p class="editor-name">Ivana Nemšoková</p>
+                    <p class="editor-affiliation">Biomedical Research Center, Slovak Academy of Sciences<br>Bratislava, Slovakia</p>
+                    <div class="editor-role">
+                        <span>Associate Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+                
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/10.jpg" alt="Natasa Krup">
+                    </div>
+                    <p class="editor-name">Natasa Krup</p>
+                    <p class="editor-affiliation">Faculty of Medicine, University of Ljubljana<br>Ljubljana, Slovenia</p>
+                    <div class="editor-role">
+                        <span>Associate Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+                
+                <div class="editor-card">
+                    <div class="editor-image">
+                        <img src="https://aijb.thebrpi.org/aripd/public/images/editor/11.jpg" alt="Boris Kierspa">
+                    </div>
+                    <p class="editor-name">Boris Kierspa</p>
+                    <p class="editor-affiliation">Biomedical Research Center, Slovak Academy of Sciences<br>Bratislava, Slovakia</p>
+                    <div class="editor-role">
+                        <span>Associate Editor</span>
+                        <span>Auto-Ontologies</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
