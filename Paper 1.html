@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Article Layout with Reference Highlight</title>
+<style>
+  body { 
+    margin: 0; 
+    font-family: 'Segoe UI', sans-serif!important; 
+    background: #fff!important; /* header er background color e match */
+}
+
+
+
+.download-btn {
+    display: inline-block;
+    width: 250px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    background: #C00000 !important;
+    color: #fff !important; /* নিশ্চিতভাবে সাদা text */
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover / Active effects */
+.download-btn:hover {
+    background: #005fa3 !important; /* hover color override করতে !important যোগ করা হলো */
+    color: #fff !important; /* hover এও text সাদা রাখবে */
+    transform: translateY(-2px);
+}
+
+.download-btn:active {
+    background: #004680 !important;
+    color: #fff !important;
+    transform: translateY(0);
+}
+
+.crossmark-button {
+            /* সাধারণ স্টাইল */
+            display: inline-flex;
+            align-items: center; 
+            padding: 5px 10px; 
+            
+            /* আপনার অনুরোধ অনুযায়ী পরিবর্তন */
+            background-color: transparent; /* ব্যাকগ্রাউন্ড সরানো হলো */
+            border: none; /* ডিফল্ট সব বর্ডার সরানো হলো */
+            border-top: 1px solid #ccc; /* উপরের বর্ডার যোগ করা হলো */
+            border-bottom: 1px solid #ccc; /* নিচের বর্ডার যোগ করা হলো */
+            border-radius: 0; /* কোণগুলোর গোলাকার ভাব সরানো হলো */
+
+            /* লেখার স্টাইল */
+            text-decoration: none; 
+            color: #4f5858; 
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: border-color 0.2s; 
+        }
+
+        .crossmark-button:hover {
+            border-top: 1px solid #a0a0a0; /* হোভার করলে বর্ডার গাঢ় হবে */
+            border-bottom: 1px solid #a0a0a0;
+        }
+
+        /* লোগো আইকনের স্টাইল (আগের মতোই রইল) */
+        .crossmark-icon {
+            width: 20px; 
+            height: 20px; 
+            margin-right: 8px; 
+        }
+
+        .crossmark-icon img {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+.header-wrapper {
+    display: flex;
+    max-width: 100%;
+    margin: 3px auto 0;
+    padding: 0 20px;
+}
+
+.header-left {
+    flex: 1;
+    background: #FEFEFE;
+    padding-right:70px;
+    padding-left:90px;
+    padding-bottom:0px;
+    padding-top:50px;
+    border-radius: 0px;
+    box-sizing: border-box;
+
+}
+
+.header-right {
+    width: 350px;  /* fixed width */
+    background: #FEFEFE;
+    padding: 40px;
+    border-radius: 0px;
+    box-sizing: border-box;
+    
+    
+}
+
+.header-left h1 { margin-top:0; color:#002060; font-size:20pt; }
+.header-left h2 { font-size:13pt; margin-top:15px; }
+.header-left p, .header-right p { font-size:13pt; line-height:1.4; }
+
+
+
+   
+   
+    /* Image Viewer 
+    
+   /* Caption Bar এর উচ্চতা: 15px (top/bottom padding) * 2 + font size/line height = ~ 60px */
+    :root {
+        --caption-bar-height: 80px; /* Adjusting the total height including padding */
+    }
+
+   
+
+    /* --- START: UPDATED FIGURE EMBEDDING STYLES --- */
+    .figure-container {
+        max-width: 900px;
+        margin: 40px auto; 
+        padding: 25px;
+        background-color: #ffffff; 
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 3px solid #eee;
+    }
+
+    /* New wrapper for the side-by-side image and caption */
+    .figure-body {
+        display: flex; /* Enable side-by-side layout */
+        gap: 20px; /* Space between image and caption */
+        align-items: center; /* Align content to the top */
+        max-width: 700px; /* Constraint the total width of image + caption */
+        width: 100%;
+        margin-top: 15px; /* Space from the top of the container */
+    }
+
+    .figure-image {
+        /* ✅ UPDATED: Smaller width and added border */
+        max-width: 250px; /* Made even smaller for the left-aligned look */
+        width: 100%; /* Important for max-width to work */
+        height: auto;
+        border-radius: 4px;
+        cursor: pointer; 
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border: 1px solid #ddd; /* 1px border added */
+        flex-shrink: 0; /* Prevents image from shrinking */
+    }
+    .figure-image:hover {
+        box-shadow: 0 0 12px rgba(0, 123, 255, 0.3); 
+        transform: scale(1.01);
+    }
+
+    .figure-caption {
+        /* ✅ UPDATED: Align text to left and take up remaining space */
+        font-size: 10.5pt;
+        color: #333; 
+        text-align: left; /* Changed to left-align */
+        margin: 0; /* Remove top margin */
+        line-height: 1.6;
+        padding: 0; /* Remove padding */
+        flex-grow: 1; /* Allows caption to take remaining space */
+    }
+    .figure-label {
+        font-weight: bold;
+        color: #002060;
+        margin-right: 5px;
+        /* Ensure the label is inline with the text */
+        display: inline;
+    }
+
+    /* Optional: for small screens, stack them */
+    @media (max-width: 650px) {
+        .figure-body {
+            flex-direction: column;
+            align-items: center;
+        }
+        .figure-caption {
+            text-align: center;
+            margin-top: 15px;
+        }
+    }
+    /* --- END: UPDATED FIGURE EMBEDDING STYLES --- */
+
+
+    /* --- START: PREMIUM VIEWER MODAL STYLES (No Change) --- */
+    .figure-viewer-modal {
+        display: none; 
+        position: fixed; 
+        top: 0; left: 0; 
+        width: 100%; 
+        height: 100%; 
+        background: rgba(255, 255, 255, 0.98);
+        z-index: 10000;
+        justify-content: center; 
+        align-items: center;
+        overflow: hidden; 
+        user-select: none;
+    }
+
+    .viewer-content {
+        position: relative;
+        width: 100%; 
+        height: 100%;
+        max-width: 98%;
+        max-height: 98%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding-bottom: var(--caption-bar-height); 
+        box-sizing: border-box; 
+    }
+
+    #viewerImage {
+        max-width: 100%;
+        max-height: 100%; 
+        width: auto; 
+        height: auto;
+        
+        transform-origin: center center; 
+        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+        cursor: pointer; 
+        will-change: transform; 
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #viewerImage.zoom-active {
+        cursor: grab;
+    }
+    #viewerImage.zoom-active:active {
+        cursor: grabbing;
+    }
+
+    .control-button {
+        background: none;
+        border: none;
+        color: #fff; 
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 8px 12px;
+        border-radius: 5px;
+        transition: background 0.2s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        margin: 0 2px;
+    }
+
+    .control-button.zoom-ctrl {
+        background: rgba(255, 255, 255, 0.1);
+        font-size: 20px;
+        padding: 6px 15px;
+        font-weight: normal;
+    }
+
+    .control-button.zoom-ctrl:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    .control-button.zoom-ctrl:disabled {
+        color: #999;
+        cursor: not-allowed;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .control-button.download-fig-button {
+        background: #28a745; 
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+    .control-button.download-fig-button:hover {
+        background: #1e7e34;
+    }
+
+    .control-button.copy-image-button {
+        background: #006699; 
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+    .control-button.copy-image-button:hover {
+        background: #0056b3;
+    }
+    
+    .close-viewer {
+        position: absolute;
+        top: 25px;
+        right: 25px; 
+        left: auto;
+        font-size: 40px;
+        color: #333; 
+        cursor: pointer;
+        line-height: 1;
+        text-shadow: 0 0 5px rgba(255,255,255,0.5);
+        z-index: 10001;
+    }
+
+    .viewer-caption-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.85); 
+        color: #fff;
+        padding: 15px 50px; 
+        height: var(--caption-bar-height); 
+        box-sizing: border-box; 
+        z-index: 10001;
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+    }
+    
+    .caption-text-area {
+        flex-grow: 1; 
+        text-align: left;
+        padding-right: 15px;
+        line-height: 1.4;
+        max-height: 100%; 
+        overflow: hidden; 
+    }
+
+    .control-buttons-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px; 
+        flex-shrink: 0; 
+    }
+
+    .zoom-controls {
+        display: flex;
+        gap: 2px;
+        margin-right: 10px; 
+    }
+    /* --- END: PREMIUM VIEWER MODAL STYLES --- */
+    
+    /* Image Viewer */
+
+/* ===== BODY AREA ===== */
+
+
+
+
+</style>
+</head>
+<body>
+
+
+<!-- ===== HEADER ===== -->
+<section class="header-wrapper">
+  <div class="header-left">
+    
+    
+    <!-- Article Component Wrapper -->
+<div id="articleWrapperScoped" style="all: initial; font-family:'Segoe UI', sans-serif; display:block; margin-top:20px; margin-bottom:40px;">
+
+  <!-- Article Type & Access -->
+  <span style="font-size:11pt; display:flex; align-items:center; margin-top:0pt; margin-bottom:20pt;font-weight:bold;">
+    <img src="https://cdn-icons-png.flaticon.com/128/11413/11413281.png" 
+         alt="Article Icon" 
+         id="articleIcon"
+         style="height:20px; width:auto; margin-right:6px;">
+    
+    <span id="articleText" style="margin-left:0px; color:#6F6F6F;">Original Research Article | Open Access | Peer Reviewed</span>
+  </span>
+
+
+
+  <!-- Article Title -->
+  <p style="text-align: left; margin-top:30px; margin-bottom:20px;">
+      <span style="font-size:18pt; color:#002060; display:block; margin-bottom:8pt; font-weight:bold;">
+          Knowledge and Attitude Towards Doping Among University Students in Jordan
+
+
+
+      </span>
+  </p>
+
+  <!-- Author with ORCID -->
+  <div style="font-weight:bold; font-size:11pt; margin-top:10px; margin-bottom:20pt; text-align:left;">
+<span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Kamal A. Hadidi<sup style="font-size:8pt; position:relative; top:-2px;">1</sup>
+    
+    <a href="https://orcid.org/0000-0001-5284-1061" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:khadidi@ju.edu.jo" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="khadidi@ju.edu.jo">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>,
+  </span>
+  <span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Suhad M. Khasawneh<sup style="font-size:8pt; position:relative; top:-2px;">2</sup>
+    
+    <a href="https://orcid.org/0009-0009-3175-5725" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:suhadkhassawneh@yahoo.com" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="suhadkhassawneh@yahoo.com">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>,
+  </span>
+  <span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Raghad M. Bani Hamad<sup style="font-size:8pt; position:relative; top:-2px;">3</sup>
+    
+    <a href="https://orcid.org/0009-0005-3582-221X" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:rhdjwd1999@gmail.com" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="rhdjwd1999@gmail.com">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>,
+  </span>
+  <span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Hiba Z. Janbek<sup style="font-size:8pt; position:relative; top:-2px;">4</sup>
+    
+    <a href="https://orcid.org/0009-0005-3660-7554" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:hjanbek@childrensnational.org" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="hjanbek@childrensnational.org">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>,
+  </span>
+<span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Amwaj A. Al-Farajat<sup style="font-size:8pt; position:relative; top:-2px;">5</sup>
+    
+    <a href="https://orcid.org/0000-0003-2367-537X" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:amwajfarajat99@gmail.com" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="amwajfarajat99@gmail.com">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>,
+  </span>
+  <span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Rufayda H. Alamaireh<sup style="font-size:8pt; position:relative; top:-2px;">6</sup>
+    
+    <a href="hhttps://orcid.org/0009-0005-1888-315X" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:rufaidahussien1@gmail.com" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="rufaidahussien1@gmail.com">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>,
+  </span>
+  <span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Zena U. Al-ani<sup style="font-size:8pt; position:relative; top:-2px;">7</sup>
+    
+    <a href="https://orcid.org/0009-0009-6494-3298" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:zenauqba@gmail.com" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="zenauqba@gmail.com">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>,
+  </span>
+  <span style="display:inline-flex; align-items:center; margin-right:0px;">
+    Farah E. Alazizi<sup style="font-size:8pt; position:relative; top:-2px;">8</sup>
+    
+    <a href="https://orcid.org/0009-0000-7910-2269" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:frh0175786@ju.edu.jo" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="frh0175786@ju.edu.jo">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>,
+  </span>
+  <span style="display:inline-flex; align-items:center; margin-right:0px;">
+   Akram K. Alhadidi<sup style="font-size:8pt; position:relative; top:-2px;">9</sup>
+    
+    <a href="https://orcid.org/0000-0001-8263-977X" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:akram_hadidi@hotmail.com" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="akram_hadidi@hotmail.com">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>, and
+  </span>
+  <span style="display:inline-flex; align-items:center; margin-right:0px;">
+   Abdulrahman E. Alhanbali<sup style="font-size:8pt; position:relative; top:-2px;">10</sup>
+    
+    <a href="https://orcid.org/0000-0003-1860-4294" target="_blank" style="margin-left:6px; text-decoration:none;">
+      <img src="https://pub.mdpi-res.com/img/design/orcid.png" title="ORCID" style="height:1em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>
+    
+    <a href="mailto:aehanbali@gmail.com" style="margin-left:6px; text-decoration:none;" onclick="event.preventDefault();" title="aehanbali@gmail.com">
+      <img src="https://cdn-icons-png.flaticon.com/128/16622/16622920.png" alt="Email" style="height:1.3em; width:auto; position:relative; top:-1px; transform:scale(1.2);">
+    </a>,
+  </span>
+
+    
+  </div>
+
+<!-- Affilation -->
+  <span style="font-weight:bold;font-size:11pt; color: #6F6F6F">Affiliations</span>
+
+  <!-- Abstract Content -->
+  <span style="display:block; text-align: left; margin-top:10px; font-family:'Segoe UI';font-size:9pt;margin-right: 20px;color: #6F6F6F">
+    <sup>1 </sup>Department of Pathology Microbiology and Forensic Medicine, School of Medicine, the University of Jordan. Jordan Poison Information Center- Jordan University Hospital<br>
+    <sup>2 </sup>Jordan Poison Information Center- Jordan University Hospital.<br>
+    <sup>3 </sup>Medical Students, School of Medicine, the University of Jordan.<br>
+    <sup>4 </sup>Medical Students, School of Medicine, the University of Jordan.<br>
+    <sup>5 </sup>Medical Students, School of Medicine, the University of Jordan.<br>
+    <sup>6 </sup>Medical Students, School of Medicine, the University of Jordan.<br>
+    <sup>7 </sup>Medical Students, School of Medicine, the University of Jordan.<br>
+    <sup>8 </sup>Medical Students, School of Medicine, the University of Jordan.<br>
+    <sup>9 </sup>MD, The National Center for Diabetes Endocrinology and Genetics, Jordan.<br>
+    <sup>10 </sup>MD, School of Medicine, the University of Jordan.<br>
+    <br>
+  </span>
+  
+  
+  <!-- Address for Correspondence: -->
+  <span style="font-weight:bold;margin-top:10px!imporatnt; font-size:11pt; color: #6F6F6F">Address for Correspondence
+  </span>
+
+  <!-- Abstract Content -->
+  <span style="display:block; text-align: left; margin-top:10px; font-family:'Segoe UI';font-size:9pt;margin-right: 20px; margin-bottom:24px;color: #6F6F6F">
+    <sup>1 </sup>Kamal A. Hadidi, Department of Pathology Microbiology and Forensic Medicine, School of Medicine, the University of Jordan. Jordan Poison Information Center- Jordan University Hospital.<a href="mailto:khadidi@ju.edu.jo" 
+          style="text-decoration:none; color:inherit; font-size:9pt!important;font-family:'Segoe UI' !important;">
+          khadidi@ju.edu.jo
+       </a><br>
+       <sup>2 </sup>Suhad M. Khasawneh, Jordan Poison Information Center- Jordan University Hospital.<a href="mailto:suhadkhassawneh@yahoo.com" 
+          style="text-decoration:none; color:inherit; font-size:9pt!important;font-family:'Segoe UI' !important;">
+          suhadkhassawneh@yahoo.com
+       </a>
+  </span>
+  
+  <!-- Article History Section -->
+  <span style="font-weight:bold;margin-top:10px!imporatnt; font-size:11pt; color: #6F6F6F">Article History
+  </span>
+   <span style="display:block; text-align: left; margin-top:10px; font-family:'Segoe UI';font-size:9pt;margin-right: 20px; margin-bottom:24px;color: #6F6F6F">
+    Received: 20 July 2025 | Accepted: 31 August | Published: 3 September 2025
+  </span>
+ 
+  
+  
+
+
+<hr style="border:0; border-top:3px solid #ccc; margin:15px 0 30px 0;">
+
+  <!-- Abstract Heading -->
+  <span id="abstract" style="font-weight:bold; font-size:13pt;">Abstract</span>
+<hr style="border:0; border-top:3px solid #ccc; margin:15px 0 15px 0;">
+  <!-- Abstract Content -->
+  <span style="display:block; text-align: left; margin-top:10px; margin-bottom:24px;font-family:'Segoe UI';font-size:11pt;margin-right: 20px;">
+     <strong>Background:</strong> Unfortunately, researches on knowledge and attitudes toward doping is lacking in Jordan. The aim of this
+    study is to investigate perceived beliefs and awareness of doping among university students in Jordan.<br><br>
+    <strong>Methods:</strong> Self-administered questionnaire of students at the University of Jordan. Students were approached randomly at
+    their classrooms over 3 months.<br><br>
+    <strong>Results:</strong> There were significant findings between different age groups, family monthly income, grade point average (GPA),
+    ethical beliefs, and peer pressure when comparing whether or not students were willing to try or had previously tried
+    using performance enhancing substances (PESs). Most importantly, this study found that a huge lack of knowledge about
+    possible side effects of PESs.<br><br>
+    <strong>Conclusions:</strong>  The results emphasize the significance of addressing the moral and ethical issues surrounding doping, as
+    well as the need for further research into the potential elements that may lead to fewer negative perceptions and greater
+    understanding about doping among university students.
+  </span>
+  
+ <!-- Keywords Section -->
+<div class="keywords-section">
+  <span style="font-family:'Segoe UI';font-size:13pt; margin-bottom:10px!important;font-weight:bold;">Keywords:</span>
+  <p>
+    <span class="keyword">knowledge</span>
+    <span class="keyword">attitude</span>
+    <span class="keyword">doping</span>
+    <span class="keyword">university students</span>
+    <span class="keyword">Jordan</span>
+  </p>
+</div>
+
+<style>
+.keywords-section {
+  background-color:#f8f8f8; 
+  padding: 10px 15px;
+  margin: 20px 0;
+  border-radius: 4px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.keywords-section p {
+  margin: 5px 0 0 0;
+  font-size: 11pt;
+  line-height: 1.5;
+}
+
+.keyword {
+  background-color: transparent; /* fully transparent background */
+  border: 1px solid #006699;     /* outline color */
+  padding: 3px 6px;
+  border-radius: 3px;
+  margin-right: 5px;
+  display: inline-block;
+  font-size: 10.5pt;
+}
+</style>
+
+  
+  
+ <!-- ===== MAIN BODY ===== -->
+ 
+ <br>
+ <span id="Background" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">1. Background:</span>
+ <hr style="border:0; border-top:3px solid #ccc; margin:15px 0 15px 0;">
+ 
+   <p style="display:block; text-align:left; font-family:'Segoe UI'; font-size:13pt;  line-height:1.5;">
+    Doping is defined as the presence of prohibited substances or methods to illegally improve the sporting performance and to gain an advantage over competitors 
+    <span id="intext30" onclick="showPopup(event,'ref30')" style="color:#006699; cursor:pointer;">[Vlad et al., 2018]</span> 
+   The use of PESs has increased recently, especially among young people participating in sports, due to media attention on the importance of having a muscular body, which encouraged them to use PESs to be in the best possible athletic looking condition 
+    <span id="intext8" onclick="showPopup(event,'ref8')" style="color:#006699; cursor:pointer;">[Dandoy & Gereige, 2012]</span>. 
+    A study on non-sports practicing adolescents revealed that 48% used PESs to improve their performance and 45% to enhance physical appearance  
+    <span id="intext26" onclick="showPopup(event,'ref26')" style="color:#006699; cursor:pointer;">[Sagoe et al., 2015]</span>.
+    According to a study conducted on university students in Jordan, almost one-third of the participants began abusing these substances before reaching the age of 15 
+    <span id="intext28" onclick="showPopup(event,'ref28')" style="color:#006699; cursor:pointer;">[Tahtamouni et al., 2008]</span>.<br>
+    
+ </p>   
+    
+    <div class="figure-container">
+    <div class="figure-body">
+        <img src="https://aijb.thebrpi.org/aripd/public/images/1_files/image0002.jpg" 
+             alt="Figure 1: Sample Data Analysis" 
+             class="figure-image" 
+             onclick="openFigureModal(this.src, 'Figure_1_Data_Analysis.png', 'Figure 1. A detailed visualization of the sample data analysis showing correlation trends and outliers.')">
+        <p class="figure-caption">
+            <span class="figure-label">Figure 1.</span> 
+            A detailed visualization of the sample data analysis showing correlation trends and outliers. This layout provides a more modern look for academic articles, ensuring the image and its caption are visually connected yet separate.
+        </p>
+    </div>
+</div>
+
+<p style="display:block; text-align:left; font-family:'Segoe UI'; font-size:13pt;  line-height:1.5;">
+
+    
+    The World Anti-Doping Agency (WADA) has categorized prohibited substances into different categories, with anabolic androgenic steroids (AASs) being the most abused 
+    <span id="intext35" onclick="showPopup(event,'ref35')" style="color:#006699; cursor:pointer;">[World Anti-Doping Agency (WADA), 2015]</span>.
+    A study conducted in Sub Saharan Africa in 2015 showed high prevalence of AAS use (overall lifetime prevalence 3.8%)
+    <span id="intext26" onclick="showPopup(event,'ref26')" style="color:#006699; cursor:pointer;">[Sagoe et al., 2015]</span>.
+   Additionally, a 2021 systematic review and meta-analysis of Iranian athletes found that the overall prevalence rate of anabolic-androgenic steroid misuse was 36.2%, with the highest rates among bodybuilding athletes compared to other athletes 
+    <span id="intext27" onclick="showPopup(event,'ref27')" style="color:#006699; cursor:pointer;">[Selk-Ghaffari et al., 2021]</span>.
+    In Jordan, the prevalence and risk factors of anabolic- androgenic steroids abuse was 4.2% in collegiate students compared to 26% among the athletes <span id="intext28" onclick="showPopup(event,'ref28')" style="color:#006699; cursor:pointer;">[Tahtamouni et al., 2008]</span>, and 8.8% among gymnasium clients in Amman, the capital of Jordan, in another study
+    <span id="intext33" onclick="showPopup(event,'ref33')" style="color:#006699; cursor:pointer;">[Wazaify et al., 2014]</span>.<br>
+    </p>
+    
+ <div class="figure-container">
+    <div class="figure-body">
+        <img src="https://aijb.thebrpi.org/aripd/public/images/1_files/image001.png" 
+             alt="Figure 2: Sample Data Chart" 
+             class="figure-image" 
+             onclick="openFigureModal(this.src, 'Figure_2_Data_Chart.png', 'Figure 2. An alternative sample data chart demonstrating different plotting techniques for time series analysis.')">
+        <p class="figure-caption">
+            <span class="figure-label">Figure 2.</span> 
+            An alternative sample data chart demonstrating different plotting techniques for time series analysis. This structure is responsive and works well in most modern browser viewports.
+        </p>
+    </div>
+</div>
+<p style="display:block; text-align:left; font-family:'Segoe UI'; font-size:13pt;  line-height:1.5;">
+
+    Doping can cause serious side effects and health problems
+    <span id="intext13" onclick="showPopup(event,'ref13')" style="color:#006699; cursor:pointer;">[Hartgens & Kuipers, 2004]</span>, including cardiovascular complications
+    <span id="intext2" onclick="showPopup(event,'ref2')" style="color:#006699; cursor:pointer;">[Baggish et al., 2017</span>;
+    <span id="intext1" onclick="showPopup(event,'ref1')" style="color:#006699; cursor:pointer;">Hartgens & Kuipers, 2004]</span>,
+    kidney diseases
+    <span id="intext9" onclick="showPopup(event,'ref9')" style="color:#006699; cursor:pointer;">[Davani-Davari et al., 2019]</span>,
+    reproductive system disorders
+    <span id="intext5" onclick="showPopup(event,'ref5')" style="color:#006699; cursor:pointer;">[Christou et al., 2017]</span>, and psychological disorders
+    <span id="intext31" onclick="showPopup(event,'ref31')" style="color:#006699; cursor:pointer;">[Vorona & Nieschlag, 2018]</span>.
+    Most doping agents exert serious side effects, especially when used in combination, at high doses, and for extended periods. Despite these risks, individuals still use doping to achieve personal victory or due to pressure from coaches or clubs to win medals. Studies showed that high percentages of PESs users were unaware of the health- related side effects that PESs could cause 
+    <span id="intext12" onclick="showPopup(event,'ref12')" style="color:#006699; cursor:pointer;">[Giraldi et al., 2015</span>;
+    <span id="intext15" onclick="showPopup(event,'ref15')" style="color:#006699; cursor:pointer;">Jaafar & Hamat, 2020</span>;
+    <span id="intext22" onclick="showPopup(event,'ref22')" style="color:#006699; cursor:pointer;">Nicholls et al., 2017</span>;
+    <span id="intext32" onclick="showPopup(event,'ref32')" style="color:#006699; cursor:pointer;">Wanjek et al., 2007]</span>.<br>
+    <br>
+    There appears to be a paucity of studies on the knowledge and attitudes towards doping in Jordan. This highlights the need for further research to investigate the extent of knowledge and attitudes towards doping in the country. The aim of this study is to investigate the perceived beliefs and awareness of doping among university students in Jordan, and to have an idea of the extent to which doping is prevalent in the Jordanian population.<br>
+    <br>
+
+    <span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">2. Materials and Methods:</span><br>
+    <hr style="border:0; border-top:3px solid #ccc; margin:15px 0 15px 0;">
+    <span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">2.1 Research Design and Study Participants</span><br><br>
+     </p>
+    <p style="display:block; text-align:left; font-family:'Segoe UI'; font-size:13pt;  line-height:1.5;">   
+    The study adopted cross-sectional design and data was collected from 1859 students at the University of Jordan by convenient sampling. The selection criterion included both female and male students who were enrolled in the University of Jordan by the time data collection took place, regardless of specialty and year of study. Students were approached randomly in classrooms and were asked to fill the questionnaire. Researchers also chose classrooms randomly. Data collection was conducted through 3 months starting from December 6th, 2022 until February 6th, 2023.<br>
+    <br>
+    <span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">2.2 Instruments</span><br><br>
+   
+    Data was collected through a self-administered questionnaire developed by researchers and validated first by distributing it to 10 academicians at the University of Jordan; School of Education, School of Sport Science and School of Medicine and also to Jordan Anti-Doping organization (JADO), then a pilot study was conducted on 50 students from the University of Jordan, the invalid items of the questionnaire were dropped. To validate translating the questionnaire from English to Arabic, which is the native language in Jordan, translation-retranslation method was used. The questionnaire had three sections. The first section sought the demographic details of the respondents (e.g., age, gender, place of residence, family monthly income, sports participation, specialty and year and of study). The second section had items on knowledge on doping such as general knowledge on substances that enhance performance, anabolic steroids and stimulants. Other aspects included sources of information on doping and consequences of the use of PESs. The last section of the questionnaire sought information on attitudes towards doping.<br>
+    <br>
+   
+   <span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">2.3 Statistical Analysis</span><br><br>
+ 
+    Analysis and visualization were done using version 3.9.12 of Python. Versions 1.4.2 and 1.21.5 of Pandas and NumPy were utilized, respectively for various data wrangling processes. Statistical tests were done utilizing version 0.5.3 of Pingouin package for python. Scikit-learn version 1.0.2 was used in addition to the previous mentioned package for building the regression model. Matplotlib and Seaborn (versions: 3.6.0 and 0.11.2, respectively) were used for visualization.<br>
+    <br>
+Scores of negative feelings were calculated by adding the individual rating of embarrassment, guilt, anger, and sadness when caught by each participant. Students were given scores out of 14 points regarding their knowledge about doping side effects. Nominal variables were described using frequencies and percentages, while mean ± standard deviation was used to describe continuous variables. Score differences between various groups were assessed by T-test and one- way analysis of variance (ANOVA). Welch’s ANOVA was used with variables that did not meet the homoscedasticity assumption for regular ANOVA. Tukey’s honest significance difference test (HSD) post hoc test was used to compare different groups if one-way ANOVA’s results were significant, while Games-Howell test was used if Welch’s ANOVA was significant. T-test was used to compare percentage of doping usage between different groups using. Willing to try doping between different categories were compared using Chi-square test. Multiple binary logistic regression model was then applied to variables with interesting findings to predict their effect on willing to use doping agents. Variance inflation factor was used to detect collinearity in variables used in logistic regression with a cutoff point of 5. A p-value of 0.05 was set as a cutoff point for significant findings.<br>
+<br>
+<span id="Results" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">3. Results:</span><br>
+<hr style="border:0; border-top:3px solid #ccc; margin:15px 0 15px 0;">
+<span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">3.1 Participant Demographics</span><br><br>
+    </p>
+    <p style="display:block; text-align:left; font-family:'Segoe UI'; font-size:13pt;  line-height:1.5;">
+
+The sample consisted of 1859 students who were actively enrolled in the University of Jordan at the time of the survey. Of whom, 1209 (65.03%) were females and 650 (34.97%) were males. Most of the applicants were below 23 years of age 1758 (94.57%). The majority of participants were residing in Amman governorate -the capital of Jordan- at the time of the survey 1308 (70.36%). In addition, 1499 (80.63%) people reported living in a major city compared to 360 (19.37%) living in rural villages. Further breakdown of participants' age, collage and governorate of residency can be found in (Table1). Out of the total sample, 799 (42.98%) reported that their family monthly income is less than 500 Jordan Dinars (JD), 681 (36.63%) reported it being between 500 and 1000 JD, while 379 (20.39%) had family income of more than 1000 JD.<br>
+Of the total number of participants, 1349 (72.57%) were in their first year of university study, 316 (17.0%) were in their second year and 128 (6.89%) were in their third year. The number of people in their fourth, fifth or sixth years were 56 (3.01%), 7 (0.38%) and 3 (0.16%) respectively. In terms of GPA, 693 (37.28%) students had an excellent GPA, 712 (38.3%) reported having a very good GPA and 331 (17.81%) had a good GPA, while only 123 (6.62%) students reported a GPA lower than that. When asked about how frequently they play sports, 347 (18.67%) students reported that they don’t play sports, 1006 (54.12%) answered that they sometimes play sports, 254 (13.66%) practiced sports regularly at home, 152 (8.18%) practiced regularly at a gym and 100 (5.38%) students said they were professional athletes.<br>
+<br>
+
+<span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">3.2 Knowledge About Doping</span><br><br>
+The majority of participants either did not know or were unsure if using any doping agent could increase their performance in sports. In addition, 1113 (59.87%) students did not know if doping is prohibited by law and 358 (19.26%) said it is prohibited while only 338 (20.87%) knew that doping usage outside of professional sports is not prohibited. When asked about the harms of different doping agents, most of participants answered with “I don’t know”. This was evident also when asked about specific side effects of different agents. For instance, 1691 (90.96%) couldn’t associate nipple discharge with doping usage, 1599 (86.01%) didn’t recognize skin rash as a possible side effect, 1554 (83.59%) did not know doping could cause testicular atrophy in males, 1447 (77.84%) could not tie excessive hair growth to doping usage and 1486 (79.94%) didn’t know that erectile dysfunction is a possible side effect of doping.<br>
+<br>
+The mean side effect knowledge score was 3.75 out of 14 points with a standard deviation (SD) of 3.24. People attending a gym had a mean score of 4.26 ±3.56 compared to 3.67 ±3.56 in those who do not (p=0.012). Gender and GPA category did not have any significant association with knowledge score in this
+sample (p=0.56 and 0.14, respectively). On the other hand, those who never played sports had lower scores compared to those who play regularly at home or at a gym (p=0.003).<br>
+<br>
+<span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">3.3 Attitude Toward Doping</span><br><br>
+
+Of the total number of participants, 1725 (92.79%) said they never thought of using any doping agent while 134 (7.21%) students either have used or thought of using them at some point of their lives. Only 19 (1.02%) students reported that they have used at least one of the following compounds without medical indication: androgenic anabolic steroids, B-blockers, erythropoietin, human growth hormones or diuretics. On the other hand, 12 (0.65%) students reported using one of them according to medical prescription while the rest of the sample 1847 (99.35%) denied using any of those medications. No significant associations could be found comparing percentage of doping without indication usage between males and females, between people who go to gyms and those who don’t, or between those who live in an urban city and those who live in a village (p= 0.53, 0.22 and 0.27, respectively).<br>
+<br>
+The mean negative feeling score for this study sample is 12.78 out of 20 (±6.21). A breakdown of each subcomponent is visualized in figure 1. Attending a fitness club was associated with lower negative feeling scores (p=0.008). Professional athletes had significantly lower negative feeling scores (mean 10.5 ±7.15) than those who practice sometimes (mean 13.17 ±6.12, p=0.004) and those who play sports regularly at home (mean 12.84 ±6.12, p=0.035) (ANOVA’s p=0.003). People had different responses when asked how ethical is doping in sports, 1251 (67.29%) thought it was completely unethical, 514 (27.65%) thought it could be ethical under certain circumstances, while 94 (5.06%) responded that doping is ethical regardless of situation. There was a significant difference in those three groups when comparing negative feeling scores if caught (p<0.001), with significant post hoc results when comparing those who think it’s unethical with those who justify in some situations and those who believe it’s completely ethical (p<0.001 for both). The mean score for those who thought its unethical was 13.99 ±5.77, while for people thinking it could be justified in some situations it was 10.59±6.07, and for those who justified its use at all circumstances it was 8.76 ±7.49 (figure 2). Regarding peer pressure, 1519 (81.71%) were sure they would resist it, 114 (6.13%) answered with maybe they will resist it, 41 (2.21%) were not sure if they could resist, and 185 (9.95%) believed they will not resist at all.<br>
+    <br>
+Comparing whether students were willing to try - or have already tried - using a doping substance or not yielded some significant findings between different age groups, different family monthly income, GPA, thoughts on ethicality, and stance from peer pressure (p= 0.003, 0.009, 0.001, <0.001 and <0.001, respectively). On the other hand, no significant association was found by comparing gender, urban residency, sport frequency, or knowing about prohibition; and having the thought of using these agents – or have them used already - (p= 0.07, 0.05,0.94, 0.31, respectively). Using a logistic regression model, the variables with potential interesting findings were used to predict whether someone is willing to use doping. Completely justifying doping use was found to be a significant predictor of willingness to use doping (Log-odds= 1.21, 95% confidence interval (CI) = [0.62-1.81], p<0.001). On the other hand, believing their use is unethical was a significant negative predictor (Log-odds= -0.84, CI= [(- 1.28)-(-0.41)], p<0.001). Being unsure about peer pressure resistance showed significant prediction of willingness to use doping (Log-odds= 2.38, CI= [1.61-3.14], p<0.001). In addition, feeling that peer pressure could not be resisted was also significantly a predictor of willingness to use doping (Log-odds= 1.22, CI= [(0.68)-(1.75)], p=0.001).<br>
+    <br>
+<span id="Discussion" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt;color:#002060;">4. Discussion:</span><br>
+<hr style="border:0; border-top:3px solid #ccc; margin:15px 0 15px 0;">
+<span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">4.1 Participant Demographics</span><br><br>
+    </p>
+    <p style="display:block; text-align:left; font-family:'Segoe UI'; font-size:13pt;  line-height:1.5;">
+The present study aimed to investigate the knowledge and attitude of university students towards doping. The demographic characteristics of the sample reveal that the majority of participants are females under the age of 23, who come from families with a middle to high monthly income. Most of these individuals are from an urban background, with the majority residing in the capital of Jordan, Amman, making up 70.63% of the sample. About 72.57% of the students are in their first year of study, and nearly 75% of respondents have a very good to excellent GPA. This finding underscores the importance of targeting diverse populations in future studies to better understand the factors influencing doping behavior.<br>
+<br>
+Regarding sports participation, only 18.67% of respondents reported not engaging in any sports- related activities, meaning that almost 80% of this sample practices some form of physical activity. However, professional athletes make up a small proportion of the sample, with only 5.38% falling under this category.<br>
+<br>
+The majority of the participants never thought of using any doping agent. Moreover, 98% of the participants never used doping agents, however 30 participants, comprising 1.67 % reported using, of which only 12 had a medical exemption for their use. The low prevalence of self- reported doping use in this sample is consistent with previous studies, which have found that the prevalence of doping use among college students is generally low
+<span id="intext7" onclick="showPopup(event,'ref7')" style="color:#006699; cursor:pointer;">[Constantinou & Aguiyi, 2022]</span>.
+However, it is important to note that participants may be hesitant to admit to using banned substances due to fear of negative consequences. Therefore, it is possible that the actual prevalence of doping use in this population may be higher than reported.<br>
+<br>
+This study revealed no significant association between gender and percentage of doping among university students. In contrary to a previous study conducted on professional athletes where results revealed lower use of prohibited substances in female versus male athletes
+<span id="intext6" onclick="showPopup(event,'ref6')" style="color:#006699; cursor:pointer;">[Collomp et al., 2022]</span>.<br>
+<br>
+Furthermore, comparing this study to a previous study found that the prevalence of steroid use throughout a predominantly rural area to be similar to that found by previous studies conducted in metropolitan areas; prevalence was not affected by city or school size
+<span id="intext34" onclick="showPopup(event,'ref34')" style="color:#006699; cursor:pointer;">[Whitehead et al., 1992]</span>.<br>
+<br>
+<span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">4.2 Knowledge About Doping</span><br><br>
+The majority of the sample did not have knowledge about the effect of doping on sports performance or the regulations set on its use by law. In addition, this study demonstrates a concerning lack of knowledge and awareness regarding the harms and side effects of doping agents among university students. This lack of knowledge is reflected in the high proportion of respondent who were unable to identify or associate the common potential side effects of doping agents in both the short and long-term, such as nipple discharge, skin rash, testicular atrophy, excessive hair growth, and erectile dysfunction. The low knowledge scores found in this study are consistent with previous studies that have also shown low levels of knowledge about doping among university students in Egypt<br>
+<br>
+<span id="intext1" onclick="showPopup(event,'ref1')" style="color:#006699; cursor:pointer;">[Bader el Dine, & Attia, 2022]</span> and Iran
+<span id="intext11" onclick="showPopup(event,'ref11')" style="color:#006699; cursor:pointer;">[Fayyazi Bordbar et al., 2014]</span>.
+Another study conducted in Jordan that assessed the knowledge of both healthcare providers and non-healthcare providers who were associated with sport related issues found that both groups need to enhance their professional and legal knowledge about doping agents
+<span id="intext24" onclick="showPopup(event,'ref24')" style="color:#006699; cursor:pointer;">[Odeh et al., 2022]</span>.
+These findings indicate that there is a widespread lack of knowledge and awareness regarding doping among various populations, including university students, healthcare providers and the public.<br>
+<br>
+However, this study did find that individuals who never played sports had lower knowledge scores compared to those who participated in sports regularly. This is expected, as students who had participated in sport competitions would be more knowledgeable. However, this finding is contrary to another study's findings where there was no significant correlation between college athlete's awareness of PES and competition experience
+<span id="intext16" onclick="showPopup(event,'ref16')" style="color:#006699; cursor:pointer;">[Kamenju, 2014]</span><br>
+<br>
+<span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">4.3 Attitude Toward Doping</span><br><br>
+
+The results of the present study suggest that a majority of students have a negative attitude towards doping in sports, with 67.29% considering it completely unethical which is promising and aligns with the generally accepted view that doping in sports is cheating and goes against the principles of fair play. This is consistent with previous researches on attitudes towards doping, which have found that a majority of individuals view the use of PESs as a violation of fair play and sportsmanship<br>
+<br>
+<span id="intext7" onclick="showPopup(event,'ref7')" style="color:#006699; cursor:pointer;">[Constantinou & Aguiyi, 2022</span>; 
+<span id="intext1" onclick="showPopup(event,'ref1')" style="color:#006699; cursor:pointer;">Odeh et al., 2022</span>; 
+<span id="intext1" onclick="showPopup(event,'ref1')" style="color:#006699; cursor:pointer;">Rintaugu & Mwangi 2021]</span>.
+However, the fact that a significant minority (27.65%) felt that doping could be ethical under certain circumstances is a cause for concern, which is consistent with findings from other studies
+<span id="intext21" onclick="showPopup(event,'ref21')" style="color:#006699; cursor:pointer;">[Naeem et al., 2023]</span>.<br>
+<br>
+Moreover, the present study found a significant difference in negative feeling scores if correlated with the three groups with different attitudes towards doping. Those who believed doping was completely unethical reported the highest negative feeling scores, followed by those who believed it could be justified in certain circumstances, and then those who believed it was ethical under all circumstances. This suggests that attitudes towards doping are related to perceptions of the consequences of being caught, which is consistent with previous research that has found that perceptions of the risks and benefits of doping can influence attitudes towards its use
+<span id="intext3" onclick="showPopup(event,'ref3')" style="color:#006699; cursor:pointer;">[Barkoukis et al., 2013]</span>.
+Furthermore, the finding that professional athletes had significantly lower negative feeling scores than those who practice sports sometimes or regularly at home suggests that individuals who are more involved in sports may have a different view of doping in sports and may be more willing to take risks to gain a competitive advantage. However, further research is needed to explore the reasons behind this difference and the potential implications for preventing doping in sport.<br>
+<br>
+In terms of peer pressure, the present study found that the majority of students were confident in their ability to resist pressure to use PESs. This is consistent with previous research that has found that individuals who are more confident in their ability to resist peer pressure are less likely to engage in doping behavior
+<span id="intext23" onclick="showPopup(event,'ref23')" style="color:#006699; cursor:pointer;">[Ntoumanis et al., 2014]</span>.
+However, the present study also found that a small proportion of students were not sure if they could resist peer pressure or believed they would not be able to resist it at all. These findings suggest that interventions aimed at preventing doping behavior should also focus on improving athletes' confidence and ability to resist peer pressure.<br>
+<br>
+This study clearly illustrates a correlation between prevalence and attitude towards the use of PESs which is inconsistent with a previous study conducted to determine the frequency of AASs consumption in male medical students in Iran
+<span id="intext11" onclick="showPopup(event,'ref11')" style="color:#006699; cursor:pointer;">[Fayyazi Bordbar et al., 2014]</span>
+but similar to findings in a much recent study that illustrated a positive correlation between the prevalence and attitude towards AASs among male bodybuilders in Iran
+<span id="intext20" onclick="showPopup(event,'ref20')" style="color:#006699; cursor:pointer;">[Manoochehri et al., 2021]</span><br>
+In a systematic review identifying factors that predicted doping among young people, the prevalence of doping in different samples ranged from 0.9 to 6% for males, and between 0.2 and 5.3% for females
+<span id="intext22" onclick="showPopup(event,'ref22')" style="color:#006699; cursor:pointer;">[Nicholls et al., 2017]</span>.
+This study showed no significant difference in willingness between males and females, this may be due to sports and exercise becoming more popular among females in recent years, but further studies should look into it.<br>
+<br>
+Although some studies found a clear relationship between doping prevalence and age
+<span id="intext14" onclick="showPopup(event,'ref14')" style="color:#006699; cursor:pointer;">[Hoffman et al., 2008</span>; 
+<span id="intext17" onclick="showPopup(event,'ref17')" style="color:#006699; cursor:pointer;">Laure & Binsinger 2007</span>
+<span id="intext32" onclick="showPopup(event,'ref32')" style="color:#006699; cursor:pointer;">Wanjek et al., 2007]</span>, a longitudinal study 
+<span id="intext29" onclick="showPopup(event,'ref29')" style="color:#006699; cursor:pointer;">[Vandenberg et al., 2007]</span>
+examined the prevalence of AASs among a sample 5 years apart and reported that the prevalence usage remained stable with advancing in age which goes with findings in this study that showed no difference in willingness to use PESs in different age groups.<br>
+<br>
+Additionally, Moral conviction and ethical standards were negatively associated with doping in a previous study conducted on junior athletes
+<span id="intext19" onclick="showPopup(event,'ref19')" style="color:#006699; cursor:pointer;">[Madigan et al., 2016]</span>, which goes with this study’s findings as well.<br>
+<br>
+A previous study revealed that PESs were mainly supplied by either friends or health professionals and that 18% of AASs users took this substance due to pressure from their friends
+<span id="intext18" onclick="showPopup(event,'ref18')" style="color:#006699; cursor:pointer;">[Laure et al., 2004]</span>.
+In addition, El-Hammadi, and Hunien, reported that 60% of Syrian pharmacy students believed that sports mates and friends were the main cause in encouraging them to take a doping agent
+<span id="intext10" onclick="showPopup(event,'ref10')" style="color:#006699; cursor:pointer;">[El-Hammadi & Hunien, 2013]</span>. Nevertheless, in this study peer pressure is not a positive predictor for doping.<br>
+<br>
+<span id="Materials and Methods" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">Study Limitations</span><br><br>
+
+The findings of this study contribute to the growing body of research on doping attitudes and knowledge among university students. However, some limitations should be considered. The study included students from only one university, limiting the generalizability of the findings to other populations. In addition, it relied on self-report measures, which may be subject to social desirability bias. Psychological variables that were studied in other publications were not included in this study, such as happiness, self-control, self-esteem, and perfectionist strivings. Additional research studying these variables is important.<br>
+<br>
+<span id="Conclusions" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt; color:#002060;">5. Conclusions:</span><br>
+<hr style="border:0; border-top:3px solid #ccc; margin:15px 0 15px 0;">
+</p>
+    <p style="display:block; text-align:left; font-family:'Segoe UI'; font-size:13pt;  line-height:1.5;">
+In conclusion, the main findings that arose from this study is the lack of knowledge and awareness regarding the side effects of doping agents among university students. Another concerning finding is that there was a significant minority who felt that doping could be ethical under certain circumstances.<br> 
+<br>
+These findings open the possibility to concentrate on doping prevention efforts such as increased education and awareness actions addressing the harms and the health-related consequences of doping. Preventative measures should be directed toward enhancing the knowledge of PESs, their side effects and advocating for stricter regulations on the acquisition of these substances. These preventive measures could include performing educational campaigns, as well as incorporating anti-doping education into university curriculums. It is important to know that lack of knowledge and awareness about doping among university students could increase the likelihood of using these substances.<br>
+<br>
+Overall, the present study provides valuable insights into the attitudes of students towards doping in sports. The findings highlight the importance of addressing the ethical and moral considerations associated with doping, as well as the need for interventions that promote social support and resilience in the face of peer pressure. Further research is needed to investigate the factors that influence attitudes towards doping, and to develop effective prevention and intervention strategies to reduce its use in sports and contribute to the wider global efforts to promote clean and fair sports.<br><br>
+
+<span id="Conflict of Interest" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt;">Conflict of Interest:
+</span>Authors have no conflict of interest to declare.<br>
+<br>
+<span id="Ethical Approval" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt;">Ethical Approval:
+</span>The project was approved by School of Medicine, the University of Jordan Institutional Review Board.<br>
+<br>
+<span id="Funding" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt;">Funding:
+</span>None.<br>
+</p>
+
+<style>
+
+/* Reference links */
+p a {
+  display: block;           /* প্রতিটা reference আলাদা ব্লকে */
+  margin-bottom: 6px;      /* gap প্রতিটি reference শেষে */
+  color:#0077cc;
+  cursor:pointer;
+  text-decoration: none;    /* underline remove */
+}
+
+p a:hover {
+  text-decoration: underline; /* optional hover effect */
+}
+
+/* Highlight animation for scrolling from reference list */
+.ref-item {
+  scroll-margin-top:60px;
+  transition: background 1s ease;
+}
+
+sup a {
+  color:#0077cc;
+  cursor:pointer;
+  text-decoration: none;
+}
+
+/* Highlight animation for scrolling from reference list */
+.ref-item { scroll-margin-top:60px; transition: background 1s ease; 
+    
+}
+
+/* এটি সমস্ত রেফারেন্স এন্ট্রিকে টার্গেট করে স্পেস যোগ করবে */
+a[href^="#intext"] {
+    /* 1. উল্লম্ব মার্জিন সক্ষম করতে */
+    display: block !important; 
+    
+    /* 2. margin-bottom জোর করে প্রয়োগ করতে */
+    margin-bottom: 8px !important; 
+    
+    /* 3. যদি মার্জিন কোলাপ্স (collapse) হয়, তবে প্যাডিং ব্যবহার করে স্পেস নিশ্চিত করতে */
+    padding-bottom: 4px !important; 
+    
+    color: #000000 !important;
+}
+
+
+
+
+</style>
+
+<br>
+
+<span id="References" style="font-weight:bold; font-family:'Segoe UI';font-size:13pt;">References</span><br><br>
+<span style="font-family:'Segoe UI'!important;font-size:13pt;">
+  <a href="#intext1" onclick="scrollToIntext(event,'intext1')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Badr el Dine, F. M. M., & Attia, M. H. (2022). Assessment of knowledge, perception, attitude, and use of performance-enhancing substances among students of Faculty of Medicine, Alexandria University, Egypt: a pilot study. Egyptian Journal of Forensic Sciences, 12(1), 34. https://doi.org/10.1186/s41935-022-00290-6
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+  
+
+  <a href="#intext2" onclick="scrollToIntext(event,'intext2')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Baggish, A. L., Weiner, R. B., Kanayama, G., Hudson, J. I., Lu, M. T., Hoffmann, U., & Pope Jr, H. G. (2017). Cardiovascular toxicity of illicit anabolic-androgenic steroid use. Circulation, 135(21), 1991-2002. https://doi.org/10.1161/CIRCULATIONAHA.116.026945
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext3" onclick="scrollToIntext(event,'intext3')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Barkoukis, V., Lazuras, L., Tsorbatzoudis, H., & Rodafinos, A. (2013). Motivational and social cognitive predictors of doping intentions in elite sports: An integrated approach. Scandinavian journal of medicine & science in sports, 23(5), e330-e340. https://doi.org/10.1111/sms.12068
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext4" onclick="scrollToIntext(event,'intext4')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Berning, J. M., Adams, K. J., DeBeliso, M., Stamford, B. A., & Newman, I. M. (2008). Anabolic androgenic steroids: Use and perceived use in nonathlete college students. Journal of American College Health, 56(5), 499-504. https://doi.org/10.3200/JACH.56.5.499-504
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext5" onclick="scrollToIntext(event,'intext5')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Christou, M. A., Christou, P. A., Markozannes, G., Tsatsoulis, A., Mastorakos, G., & Tigas, S. (2017). Effects of anabolic androgenic steroids on the reproductive system of athletes and recreational users: a systematic review and meta-analysis. Sports Medicine, 47, 1869-1883. https://doi.org/10.1007/s40279-017-0709-z
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext6" onclick="scrollToIntext(event,'intext6')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Collomp, K., Ericsson, M., Bernier, N., & Buisson, C. (2022). Prevalence of prohibited substance use and methods by female athletes: evidence of gender-related differences. Frontiers in Sports and Active Living, 4, 839976. https://doi.org/10.3389/fspor.2022.839976
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext7" onclick="scrollToIntext(event,'intext7')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Constantinou, D., & Aguiyi, I. (2022). Use, perceptions and attitudes of cognitive and sports performance enhancing substances among university students. Frontiers in Sports and Active Living, 4, 744650. https://doi.org/10.3389/fspor.2022.744650
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext8" onclick="scrollToIntext(event,'intext8')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Dandoy, C., & Gereige, R. S. (2012). Performance-enhancing drugs. Pediatrics in review, 33(6), 265-272. https://doi.org/10.1542/pir.33-6-265
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext9" onclick="scrollToIntext(event,'intext9')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Davani-Davari, D., Karimzadeh, I., & Khalili, H. (2019). The potential effects of anabolic-androgenic steroids and growth hormone as commonly used sport supplements on the kidney: a systematic review. BMC nephrology, 20, 1-12. https://doi.org/10.1186/s12882-019-1384-0
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext10" onclick="scrollToIntext(event,'intext10')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    El-Hammadi, M., & Hunien, B. (2013). Exploring knowledge, attitudes and abuse concerning doping in sport among Syrian pharmacy students. Pharmacy, 1(2), 94-106. https://doi.org/10.3390/pharmacy1020094
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext11" onclick="scrollToIntext(event,'intext11')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Fayyazi Bordbar, M. R., Abdollahian, E., Samadi, R., & Dolatabadi, H. (2014). Frequency of use, awareness, and attitudes toward side effects of anabolic–androgenic steroids consumption among male medical students in Iran. Substance use & misuse, 49(13), 1751-1758. https://doi.org/10.3109/10826084.2014.880175
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext12" onclick="scrollToIntext(event,'intext12')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Giraldi, G., Unim, B., Masala, D., Miccoli, S., & La Torre, G. (2015). Knowledge, attitudes and behaviours on doping and supplements in young football players in Italy. Public Health, 129(7), 1007-1009. https://doi.org/10.1016/j.puhe.2015.05.008
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext13" onclick="scrollToIntext(event,'intext13')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Hartgens, F., & Kuipers, H. (2004). Effects of androgenic-anabolic steroids in athletes. Sports medicine, 34, 513-554. https://doi.org/10.2165/00007256-200434080-00003
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext14" onclick="scrollToIntext(event,'intext14')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Hoffman, J. R., Faigenbaum, A. D., Ratamess, N. A., Ross, R., Kang, J. I. E., & Tenenbaum, G. (2008). Nutritional supplementation and anabolic steroid use in adolescents. Medicine & science in sports & exercise, 40(1), 15-24. https://doi.org/10.1249/mss.0b013e31815a5181
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext15" onclick="scrollToIntext(event,'intext15')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Jaafar, Z., & Hamat, N. H. W. (2020). Doping in sports among Malaysian universities athlete: survey of the knowledge, beliefs, and perception during Malaysian universities games in Kuala Lumpur 2014. The Journal of sports medicine and physical fitness, 60(5), 794-799. https://doi.org/10.23736/S0022-4707.20.09623-1
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext16" onclick="scrollToIntext(event,'intext16')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Kamenju, W. J. (2014). Influence of Sports Disciplines and Demographics of Kenya’s Colleges Athletes on their Awareness, Perception and Attitude to Performance-Enhancing Substances Use (Doctoral dissertation, Kenyatta University).
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext17" onclick="scrollToIntext(event,'intext17')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Laure, P., & Binsinger, C. (2007). Doping prevalence among preadolescent athletes: a 4-year follow-up. British journal of sports medicine, 41(10), 660-663. https://doi.org/10.1136/bjsm.2007.035733
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext18" onclick="scrollToIntext(event,'intext18')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Laure, P., Lecerf, T., Friser, A., & Binsinger, C. (2004). Drugs, recreational drug use and attitudes towards doping of high school athletes. International journal of sports medicine, 25(02), 133-138. https://doi.org/10.1055/s-2004-819946
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext19" onclick="scrollToIntext(event,'intext19')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Madigan, D. J., Stoeber, J., & Passfield, L. (2016). Perfectionism and attitudes towards doping in junior athletes. Journal of sports sciences, 34(8), 700-706. https://doi.org/10.1080/02640414.2015.1068441
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext20" onclick="scrollToIntext(event,'intext20')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Manoochehri, Z., Barati, M., Faradmal, J., & Manoochehri, S. (2021). Random forest model to identify factors associated with anabolic-androgenic steroid use. BMC Sports Science, Medicine and Rehabilitation, 13, 1-10. </a>
+     <a href="https://doi.org/10.1186/s13102-021-00257-5"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.1186/s13102-021-00257-5
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext21" onclick="scrollToIntext(event,'intext21')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Naeem, E., Ali, A., & Ahmed, F. (2023). Knowledge, Awareness, and Attitudes towards Doping among Biochemistry University Students. Pakistan Languages and Humanities Review, 7(3), 327-337. </a>
+    <a href="https://doi.org/10.47205/plhr.2023(7-III)29"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.47205/plhr.2023(7-III)29
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext22" onclick="scrollToIntext(event,'intext22')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Nicholls, A. R., Cope, E., Bailey, R., & Kristensen, A. H. (2017). Children's first experience of taking anabolic-androgenic steroids can occur before their 10th birthday: a systematic review identifying 9 factors that predicted doping among young people. Frontiers in psychology, 8, 268260. </a>
+    <a href="https://doi.org/10.3389/fpsyg.2017.01015"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.3389/fpsyg.2017.01015
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext23" onclick="scrollToIntext(event,'intext23')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Ntoumanis, N., Ng, J. Y., Barkoukis, V., & Backhouse, S. (2014). Personal and psychosocial predictors of doping use in physical activity settings: a meta-analysis. Sports medicine, 44, 1603-1624.</a> <a href="https://doi.org/10.1007/s40279-014-0240-4"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.1007/s40279-014-0240-4
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext24" onclick="scrollToIntext(event,'intext24')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Odeh, M., Tailakh, H. M., Al Bawab, A. Q. F., Elsahoryi, N. A., & Alzoubi, K. H. (2022). A Comprehensive Assessment of Knowledge, Attitudes, and Practicalities Related to Doping Agents use among Jordanians. Clinical Practice and Epidemiology in Mental Health: CP & EMH, 18. </a>
+    <a href="https://doi.org/10.2174/17450179-v18-e2202280"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.2174/17450179-v18-e2202280
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext25" onclick="scrollToIntext(event,'intext25')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Rintaugu, E. G., & Mwangi, F. M. (2021). Knowledge, attitudes and perceptions on doping among university students in physical education and sport science related degree programmes. Journal of Human Sport and Exercise, 16, 174–186. </a>
+    <a href="https://doi.org/10.14198/jhse.2021.161.16"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.14198/jhse.2021.161.16
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext26" onclick="scrollToIntext(event,'intext26')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Sagoe, D., Torsheim, T., Molde, H., Andreassen, C. S., & Pallesen, S. (2015). Attitudes towards use of anabolic–androgenic steroids among Ghanaian high school students. International Journal of Drug Policy, 26(2), 169-174. </a>
+    <a href="https://doi.org/10.1016/j.drugpo.2014.10.004"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.1016/j.drugpo.2014.10.004
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext27" onclick="scrollToIntext(event,'intext27')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Selk-Ghaffari, M., Shab-Bidar, S., & Halabchi, F. (2021). The prevalence of anabolic-androgenic steroid misuse in Iranian athletes: a systematic review and meta-analysis. Iranian journal of public health, 50(6), 1120. </a>
+     <a href="https://doi.org/10.18502/ijph.v50i6.6411"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.18502/ijph.v50i6.6411
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext28" onclick="scrollToIntext(event,'intext28')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Tahtamouni, L. H., Mustafa, N. H., Alfaouri, A. A., Hassan, I. M., Abdalla, M. Y., & Yasin, S. R. (2008). Prevalence and risk factors for anabolic-androgenic steroid abuse among Jordanian collegiate students and athletes. The European Journal of Public Health, 18(6), 661-665. </a>
+       <a href="https://doi.org/10.1093/eurpub/ckn062"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.1093/eurpub/ckn062
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext29" onclick="scrollToIntext(event,'intext29')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Vandenberg, P., Neumark-Sztainer, D., Cafri, G., & Wall, M. (2007). Steroid use among adolescents: longitudinal findings from Project EAT. Pediatrics, 119(3), 476-486. 
+    </a> 
+    <a href="https://doi.org/10.1542/peds.2006-2529"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.1542/peds.2006-2529
+
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext30" onclick="scrollToIntext(event,'intext30')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Vlad, R. A., Hancu, G., Popescu, G. C., & Lungu, I. A. (2018). Doping in sports, a never-ending story?. Advanced pharmaceutical bulletin, 8(4), 529. 
+    </a> 
+    <a href="https://doi.org/10.15171/apb.2018.062"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.15171/apb.2018.062
+    
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext31" onclick="scrollToIntext(event,'intext31')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Vorona, E., & Nieschlag, E. (2018). Adverse effects of doping with anabolic androgenic steroids in competitive athletics, recreational sports and bodybuilding. Minerva endocrinologica, 43(4), 476-488. </a> 
+    <a href="https://doi.org/10.23736/S0391-1977.18.02810-9"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.23736/S0391-1977.18.02810-9
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext32" onclick="scrollToIntext(event,'intext32')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Wanjek, B., Rosendahl, J., Strauss, B., & Gabriel, H. H. (2007). Doping, drugs and drug abuse among adolescents in the State of Thuringia (Germany): prevalence, knowledge and attitudes. International journal of sports medicine, 28(04), 346-353. </a> 
+    <a href="https://doi.org/10.1055/s-2006-924353"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.1055/s-2006-924353
+    
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext33" onclick="scrollToIntext(event,'intext33')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Wazaify, M., Bdair, A., Al-Hadidi, K., & Scott, J. (2014). Doping in gymnasiums in amman: The other side of prescription and nonprescription drug abuse. Substance Use & Misuse, 49(10), 1296-1302. </a> 
+    <a href="https://doi.org/10.3109/10826084.2014.891625"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.3109/10826084.2014.891625
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext34" onclick="scrollToIntext(event,'intext34')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    Whitehead, R., Chillag, S., & Elliott, D. (1992). Anabolic steroid use among adolescents in a rural state. Journal of family practice, 35(4), 401-406.
+  </a>
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+
+  <a href="#intext35" onclick="scrollToIntext(event,'intext35')" style="font-family:'Segoe UI'!important;font-size:13pt !important; text-decoration:none; margin-bottom: 8px!important; color:#006699;">
+    World Anti-Doping Agency. World anti-doping code 2015. Retrived December 22, 2022, from</a> 
+    <a href="https://www.wada-ama.org/sites/default/files/prohibited_list_2018_en.pdf"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://www.wada-ama.org/sites/default/files/prohibited_list_2018_en.pdf</a>
+
+  <hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+  
+  <p style="display:block; text-align:left; font-family:'Segoe UI'; font-size:13pt;  line-height:1.5; margin-bottom:10px !IMPORTANT;">
+      <strong>Copyright and Permission:</strong>
+© 2025. The Author(s). This is an open access article
+distributed under the Creative Commons Attribution
+4.0 International License (CC BY 4.0), which permits
+sharing, adapting, and building upon this work,
+provided appropriate credit is given to the original
+author(s). For full license details, visit<a href="https://creativecommons.org/licenses/by/4.0/"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://creativecommons.org/licenses/by/4.0/
+       </a>
+<hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+<strong>Citation:</strong> Madison, S. M., Cole, M. W., & Cridland-Hughes, S. (2025). Light in the Darkest Places: Analyzing News Coverage of a U.S.
+Immigrant Detention Center. <em>International Journal of Humanities and Social Science, 15</em>, 1-14.<a href="https://doi.org/10.30845/ijhss.vol15p1"
+          style="font-size:13pt!important;font-family:'Segoe UI' !important; color:#006699; text-decoration:none;"> https://doi.org/10.30845/ijhss.vol15p1
+       </a>
+<hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+<strong>Disclaimer/Publisher’s Note:</strong> The views, opinions, and data presented in all publications are exclusively those of
+the individual author(s) and contributor(s) and do not necessarily reflect the position of BRPI or its editorial team.
+BRPI and the editorial team disclaim any liability for any harm to individuals or property arising from the use of any
+ideas, methods, instructions, or products mentioned in the content.<br>
+<hr style="border:0; border-top:3px solid #ccc; margin:20px 0 20px 0;">
+</p>
+</span>
+
+<!-- Popup Modal -->
+<div id="popup" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.4);">
+  <div class="modal-content" style="margin:10% auto; max-width:600px; padding:15px; background:#fff; border-radius:6px; position:relative; font-family:'Segoe UI'; font-size:13pt; line-height:1.4;">
+    <span class="close" onclick="closePopup()" style="float:right; font-size:20px; cursor:pointer;">&times;</span>
+    <h3 id="popupTitle" style="margin-top:0; font-size:13pt;">Reference</h3>
+    <div id="popupBox" style="display:flex; align-items:flex-start; justify-content:space-between; border:1px solid #ddd; padding:10px; border-radius:5px;">
+      <div id="popup-text" style="flex:1; word-wrap: break-word;"></div>
+      <button onclick="copyRef(this)" style="background:#28a745; color:#fff; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; margin-left:10px;">Copy</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// References data
+const references = {
+  ref1: "Badr el Dine, F. M. M., & Attia, M. H. (2022). Assessment of knowledge, perception, attitude, and use of performance-enhancing substances among students of Faculty of Medicine, Alexandria University, Egypt: a pilot study. Egyptian Journal of Forensic Sciences, 12(1), 34. https://doi.org/10.1186/s41935-022-00290-6",
+  ref2: "Baggish, A. L., Weiner, R. B., Kanayama, G., Hudson, J. I., Lu, M. T., Hoffmann, U., & Pope Jr, H. G. (2017). Cardiovascular toxicity of illicit anabolic-androgenic steroid use. Circulation, 135(21), 1991-2002. https://doi.org/10.1161/CIRCULATIONAHA.116.026945",
+  ref3: "Barkoukis, V., Lazuras, L., Tsorbatzoudis, H., & Rodafinos, A. (2013). Motivational and social cognitive predictors of doping intentions in elite sports: An integrated approach. Scandinavian journal of medicine & science in sports, 23(5), e330-e340. https://doi.org/10.1111/sms.12068",
+  ref4: "Berning, J. M., Adams, K. J., DeBeliso, M., Stamford, B. A., & Newman, I. M. (2008). Anabolic androgenic steroids: Use and perceived use in nonathlete college students. Journal of American College Health, 56(5), 499-504. https://doi.org/10.3200/JACH.56.5.499-504",
+  ref5: "Christou, M. A., Christou, P. A., Markozannes, G., Tsatsoulis, A., Mastorakos, G., & Tigas, S. (2017). Effects of anabolic androgenic steroids on the reproductive system of athletes and recreational users: a systematic review and meta-analysis. Sports Medicine, 47, 1869-1883. https://doi.org/10.1007/s40279-017-0709-z",
+  ref6: "Collomp, K., Ericsson, M., Bernier, N., & Buisson, C. (2022). Prevalence of prohibited substance use and methods by female athletes: evidence of gender-related differences. Frontiers in Sports and Active Living, 4, 839976. https://doi.org/10.3389/fspor.2022.839976",
+  ref7: "Constantinou, D., & Aguiyi, I. (2022). Use, perceptions and attitudes of cognitive and sports performance enhancing substances among university students. Frontiers in Sports and Active Living, 4, 744650. https://doi.org/10.3389/fspor.2022.744650",
+  ref8: "Dandoy, C., & Gereige, R. S. (2012). Performance-enhancing drugs. Pediatrics in review, 33(6), 265-272. https://doi.org/10.1542/pir.33-6-265",
+  ref9: "Davani-Davari, D., Karimzadeh, I., & Khalili, H. (2019). The potential effects of anabolic-androgenic steroids and growth hormone as commonly used sport supplements on the kidney: a systematic review. BMC nephrology, 20, 1-12. https://doi.org/10.1186/s12882-019-1384-0",
+  ref10: "El-Hammadi, M., & Hunien, B. (2013). Exploring knowledge, attitudes and abuse concerning doping in sport among Syrian pharmacy students. Pharmacy, 1(2), 94-106. https://doi.org/10.3390/pharmacy1020094",
+  ref11: "Fayyazi Bordbar, M. R., Abdollahian, E., Samadi, R., & Dolatabadi, H. (2014). Frequency of use, awareness, and attitudes toward side effects of anabolic–androgenic steroids consumption among male medical students in Iran. Substance use & misuse, 49(13), 1751-1758. https://doi.org/10.3109/10826084.2014.880175",
+  ref12: "Giraldi, G., Unim, B., Masala, D., Miccoli, S., & La Torre, G. (2015). Knowledge, attitudes and behaviours on doping and supplements in young football players in Italy. Public Health, 129(7), 1007-1009. https://doi.org/10.1016/j.puhe.2015.05.008",
+  ref13: "Hartgens, F., & Kuipers, H. (2004). Effects of androgenic-anabolic steroids in athletes. Sports medicine, 34, 513-554. https://doi.org/10.2165/00007256-200434080-00003",
+  ref14: "Hoffman, J. R., Faigenbaum, A. D., Ratamess, N. A., Ross, R., Kang, J. I. E., & Tenenbaum, G. (2008). Nutritional supplementation and anabolic steroid use in adolescents. Medicine & science in sports & exercise, 40(1), 15-24. https://doi.org/10.1249/mss.0b013e31815a5181",
+  ref15: "Jaafar, Z., & Hamat, N. H. W. (2020). Doping in sports among Malaysian universities athlete: survey of the knowledge, beliefs, and perception during Malaysian universities games in Kuala Lumpur 2014. The Journal of sports medicine and physical fitness, 60(5), 794-799. https://doi.org/10.23736/S0022-4707.20.09623-1",
+  ref16: "Kamenju, W. J. (2014). Influence of Sports Disciplines and Demographics of Kenya’s Colleges Athletes on their Awareness, Perception and Attitude to Performance-Enhancing Substances Use (Doctoral dissertation, Kenyatta University).",
+  ref17: "Laure, P., & Binsinger, C. (2007). Doping prevalence among preadolescent athletes: a 4-year follow-up. British journal of sports medicine, 41(10), 660-663. https://doi.org/10.1136/bjsm.2007.035733",
+  ref18: "Laure, P., Lecerf, T., Friser, A., & Binsinger, C. (2004). Drugs, recreational drug use and attitudes towards doping of high school athletes. International journal of sports medicine, 25(02), 133-138. https://doi.org/10.1055/s-2004-819946",
+  ref19: "Madigan, D. J., Stoeber, J., & Passfield, L. (2016). Perfectionism and attitudes towards doping in junior athletes. Journal of sports sciences, 34(8), 700-706. https://doi.org/10.1080/02640414.2015.1068441",
+  ref20: "Manoochehri, Z., Barati, M., Faradmal, J., & Manoochehri, S. (2021). Random forest model to identify factors associated with anabolic-androgenic steroid use. BMC Sports Science, Medicine and Rehabilitation, 13, 1-10. https://doi.org/10.1186/s13102-021-00257-5",
+  ref21: "Naeem, E., Ali, A., & Ahmed, F. (2023). Knowledge, Awareness, and Attitudes towards Doping among Biochemistry University Students. Pakistan Languages and Humanities Review, 7(3), 327-337. https://doi.org/10.47205/plhr.2023(7-III)29",
+  ref22: "Nicholls, A. R., Cope, E., Bailey, R., & Kristensen, A. H. (2017). Children's first experience of taking anabolic-androgenic steroids can occur before their 10th birthday: a systematic review identifying 9 factors that predicted doping among young people. Frontiers in psychology, 8, 268260. https://doi.org/10.3389/fpsyg.2017.01015",
+  ref23: "Ntoumanis, N., Ng, J. Y., Barkoukis, V., & Backhouse, S. (2014). Personal and psychosocial predictors of doping use in physical activity settings: a meta-analysis. Sports medicine, 44, 1603-1624. https://doi.org/10.1007/s40279-014-0240-4",
+  ref24: "Odeh, M., Tailakh, H. M., Al Bawab, A. Q. F., Elsahoryi, N. A., & Alzoubi, K. H. (2022). A Comprehensive Assessment of Knowledge, Attitudes, and Practicalities Related to Doping Agents use among Jordanians. Clinical Practice and Epidemiology in Mental Health: CP & EMH, 18. https://doi.org/10.2174/17450179-v18-e2202280",
+  ref25: "Rintaugu, E. G., & Mwangi, F. M. (2021). Knowledge, attitudes and perceptions on doping among university students in physical education and sport science related degree programmes. Journal of Human Sport and Exercise, 16, 174–186. https://doi.org/10.14198/jhse.2021.161.16",
+  ref26: "Sagoe, D., Torsheim, T., Molde, H., Andreassen, C. S., & Pallesen, S. (2015). Attitudes towards use of anabolic–androgenic steroids among Ghanaian high school students. International Journal of Drug Policy, 26(2), 169-174. https://doi.org/10.1016/j.drugpo.2014.10.004",
+  ref27: "Selk-Ghaffari, M., Shab-Bidar, S., & Halabchi, F. (2021). The prevalence of anabolic-androgenic steroid misuse in Iranian athletes: a systematic review and meta-analysis. Iranian journal of public health, 50(6), 1120. https://doi.org/10.18502/ijph.v50i6.6411",
+  ref28: "Tahtamouni, L. H., Mustafa, N. H., Alfaouri, A. A., Hassan, I. M., Abdalla, M. Y., & Yasin, S. R. (2008). Prevalence and risk factors for anabolic-androgenic steroid abuse among Jordanian collegiate students and athletes. The European Journal of Public Health, 18(6), 661-665. https://doi.org/10.1093/eurpub/ckn062",
+  ref29: "Vandenberg, P., Neumark-Sztainer, D., Cafri, G., & Wall, M. (2007). Steroid use among adolescents: longitudinal findings from Project EAT. Pediatrics, 119(3), 476-486. https://doi.org/10.1542/peds.2006-2529",
+  ref30: "Vlad, R. A., Hancu, G., Popescu, G. C., & Lungu, I. A. (2018). Doping in sports, a never-ending story?. Advanced pharmaceutical bulletin, 8(4), 529. https://doi.org/10.15171/apb.2018.062",
+  ref31: "Vorona, E., & Nieschlag, E. (2018). Adverse effects of doping with anabolic androgenic steroids in competitive athletics, recreational sports and bodybuilding. Minerva endocrinologica, 43(4), 476-488. https://doi.org/10.23736/S0391-1977.18.02810-9",
+  ref32: "Wanjek, B., Rosendahl, J., Strauss, B., & Gabriel, H. H. (2007). Doping, drugs and drug abuse among adolescents in the State of Thuringia (Germany): prevalence, knowledge and attitudes. International journal of sports medicine, 28(04), 346-353. https://doi.org/10.1055/s-2006-924353",
+  ref33: "Wazaify, M., Bdair, A., Al-Hadidi, K., & Scott, J. (2014). Doping in gymnasiums in amman: The other side of prescription and nonprescription drug abuse. Substance Use & Misuse, 49(10), 1296-1302. https://doi.org/10.3109/10826084.2014.891625",
+  ref34: "Whitehead, R., Chillag, S., & Elliott, D. (1992). Anabolic steroid use among adolescents in a rural state. Journal of family practice, 35(4), 401-406.",
+  ref35: "World Anti-Doping Agency. World anti-doping code 2015. Retrived December 22, 2022, from https://www.wada-ama.org/sites/default/files/prohibited_list_2018_en.pdf"
+};
+
+// Show popup
+function showPopup(e,id){
+  e.stopPropagation();
+  document.getElementById('popup').style.display='block';
+  document.getElementById('popup-text').innerText = references[id];
+}
+
+// Close popup
+function closePopup(){
+  document.getElementById('popup').style.display='none';
+}
+
+// Copy reference text
+function copyRef(btn){
+  navigator.clipboard.writeText(document.getElementById('popup-text').innerText)
+    .then(()=>{ btn.innerText="Copied!"; setTimeout(()=>btn.innerText="Copy",2000); });
+}
+
+// Close modal on clicking outside
+document.addEventListener('click', function(e){
+  if(!e.target.closest('#popup') && !e.target.closest('span')) 
+    document.getElementById('popup').style.display='none';
+});
+
+
+
+
+
+
+// Scroll from reference list to in-text citation
+
+
+function scrollToIntext(e, id) {
+  e.preventDefault();
+  const el = document.getElementById(id);
+  el.scrollIntoView({ behavior: 'smooth' });
+
+  // ???? Add the background and border here:
+  el.style.background = 'transparent';
+  el.style.border = '3px solid blue'; // You can change the color (red) and thickness (2px)
+
+  // ⚪ Remove the background and border after 20 seconds:
+  setTimeout(() => {
+    el.style.background = 'transparent';
+    el.style.border = 'none'; // Set the border back to 'none' or 'initial'
+  }, 20000); // 20000 milliseconds = 20 seconds
+}
+</script>
+
+ 
+ 
+  <!--    Image Viewer        -->
+
+
+<div id="figureViewerModal" class="figure-viewer-modal">
+    <span class="close-viewer" onclick="closeFigureModal()">&times;</span>
+    
+    <div class="viewer-content">
+        
+        <img id="viewerImage" src="" alt="Zoomable Figure">
+
+        <div id="viewerCaptionBar" class="viewer-caption-bar">
+            
+            <div class="caption-text-area">
+                <span id="modalCaptionText"></span>
+            </div>
+            
+            <div class="control-buttons-bar">
+                <div class="zoom-controls">
+                    <button id="zoomOutBtn" class="control-button zoom-ctrl" disabled>&minus;</button>
+                    <button id="zoomInBtn" class="control-button zoom-ctrl">+</button>
+                </div>
+
+                <a id="downloadFigBtn" class="control-button download-fig-button" download href="#">Download</a>
+                <button class="control-button copy-image-button" onclick="copyImage()">Copy Image</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    
+    const MIN_SCALE = 1;
+    const MAX_SCALE = 3; 
+    const SCALE_STEP = 0.5;
+
+    const viewerModal = document.getElementById('figureViewerModal');
+    const viewerImage = document.getElementById('viewerImage');
+    const downloadBtnFig = document.getElementById('downloadFigBtn');
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const modalCaptionText = document.getElementById('modalCaptionText');
+    
+    // Function to apply scale and transform to the image
+    function updateTransform() {
+        viewerImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+
+    // Function to update control button states and cursor
+    function updateControls() {
+        zoomOutBtn.disabled = (scale <= MIN_SCALE);
+        zoomInBtn.disabled = (scale >= MAX_SCALE);
+        
+        if (scale > MIN_SCALE) {
+            viewerImage.classList.add('zoom-active');
+            viewerImage.style.cursor = 'grab';
+        } else {
+            viewerImage.classList.remove('zoom-active');
+            viewerImage.style.cursor = 'pointer'; 
+        }
+    }
+    
+    // Resets position to center after zoom
+    function centerImage() {
+        translateX = 0;
+        translateY = 0;
+        updateTransform();
+    }
+
+    // Function to open the figure viewer
+    function openFigureModal(src, downloadFileName = 'figure.png', captionText = 'No Caption Provided.'){
+        // Reset state
+        scale = MIN_SCALE;
+        translateX = 0;
+        translateY = 0;
+        updateTransform();
+        
+        // Set image, download link, caption
+        viewerImage.src = src;
+        downloadBtnFig.href = src; 
+        downloadBtnFig.download = downloadFileName;
+        modalCaptionText.textContent = captionText; 
+        
+        viewerImage.onload = () => updateControls();
+        updateControls();
+
+        viewerModal.style.display = 'flex';
+    }
+
+    // Function to close the figure viewer
+    function closeFigureModal(){
+        viewerModal.style.display = 'none';
+        viewerImage.src = ''; 
+    }
+
+    // Zoom In function
+    function zoomIn() {
+        if (scale < MAX_SCALE) {
+            scale = Math.min(MAX_SCALE, scale + SCALE_STEP);
+            centerImage(); 
+            updateControls();
+        }
+    }
+
+    // Zoom Out function
+    function zoomOut() {
+        if (scale > MIN_SCALE) {
+            scale = Math.max(MIN_SCALE, scale - SCALE_STEP);
+            
+            // Reset position if returning to 1x scale
+            if (scale === MIN_SCALE) {
+                translateX = 0;
+                translateY = 0;
+            }
+            centerImage(); 
+            updateControls();
+        }
+    }
+
+    // Function to copy the Image to clipboard (Modern API)
+    async function copyImage() {
+        const imageSrc = viewerImage.src;
+
+        if (!imageSrc) {
+            alert('No image is currently loaded.');
+            return;
+        }
+
+        try {
+            // Fetch the image data
+            const response = await fetch(imageSrc);
+            const blob = await response.blob();
+
+            // Check if the browser supports Image/PNG type for clipboard
+            if (navigator.clipboard && navigator.clipboard.write) {
+                // Use the Clipboard Item API to write the image blob
+                await navigator.clipboard.write([
+                    new ClipboardItem({ [blob.type]: blob })
+                ]);
+                alert('Image copied to clipboard! (Paste it in another application)');
+            } else {
+                alert('Browser does not support direct image copy to clipboard.');
+            }
+
+        } catch (err) {
+            console.error('Failed to copy image:', err);
+            alert('Failed to copy image. This feature requires a secure connection (HTTPS) and modern browser support.');
+        }
+    }
+
+
+    zoomInBtn.addEventListener('click', zoomIn);
+    zoomOutBtn.addEventListener('click', zoomOut);
+    
+    // Double-click to zoom in/out
+    viewerImage.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        if (scale === MIN_SCALE) {
+            zoomIn();
+        } else {
+            // Double-click to return to 1x
+            scale = MIN_SCALE;
+            centerImage();
+            updateControls();
+        }
+    });
+
+
+    // --- Drag/Pan Logic ---
+    viewerImage.addEventListener('mousedown', (e) => {
+        if (scale > MIN_SCALE) {
+            e.preventDefault(); 
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            viewerImage.style.transition = 'none'; 
+            viewerImage.style.cursor = 'grabbing';
+        }
+    });
+
+    viewerModal.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateTransform();
+    });
+
+    viewerModal.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            viewerImage.style.transition = 'transform 0.3s ease'; 
+            if (scale > MIN_SCALE) {
+                viewerImage.style.cursor = 'grab';
+            } else {
+                 viewerImage.style.cursor = 'pointer'; 
+            }
+        }
+    });
+    
+    // Close viewer by clicking on the white background
+    viewerModal.addEventListener('click', (e) => {
+        if (e.target.id === 'figureViewerModal') {
+            closeFigureModal();
+        }
+    });
+
+    // Close viewer by pressing Esc key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && viewerModal.style.display === 'flex') {
+            closeFigureModal();
+        }
+    });
+</script>
+  <!--    Image Viewer        -->
+    <!--    Image Viewer        -->
+
+
+
+  
+
+ 
+
+
+
+  </div>
+  </div>
+
+  <div class="header-right">
+       <div style="font-family:'Segoe UI'; font-size:13pt; margin-bottom: 10px; font-weight:bold; width: 100%; text-align: right;">
+    <a href="http://www.ijhssnet.com/view.php?u=http://www.ijhssnet.com/journals/Vol_15_2025/33.pdf"
+    class="download-btn" download
+    style="
+        /* ছবিতে দেখানো নীল ব্যাকগ্রাউন্ড এবং সাদা টেক্সট */
+        background-color: #006699 !important; /* গাঢ় নীল ব্যাকগ্রাউন্ড */
+        color: white !important; /* সাদা টেক্সট, !important সহ */
+        
+        /* বাটন পুরো চওড়া করার জন্য পরিবর্তন */
+        width: 240px; /* বাটনকে parent container এর সমান চওড়া করা হলো */
+        display: flex; /* Flex ব্যবহার করে ভেতরের উপাদান সাজানো হলো */
+        justify-content: space-between; /* লেখা বামে, আইকন ডানে */
+        align-items: center;
+        
+        padding: 8px 15px; /* ভেতরের ফাঁকা স্থান বাড়ানো হলো */
+        text-decoration: none;
+        border-radius: 4px; /* কোণগুলো সামান্য গোলাকার */
+        font-family: 'Segoe UI';
+        font-size: 11pt; /* ফন্টের সাইজ কিছুটা বাড়ানো হলো */
+    ">
+    Download PDF
+    <img src="https://img.icons8.com/material-outlined/24/download--v1.png" alt="Download Icon" style="width: 20px; height: 20px; filter: invert(1) brightness(2);">
+    </a>
+</div>
+
+<div style="
+    font-family:'Segoe UI', sans-serif;
+    padding: 18px 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+">
+    <a 
+        href="https://crossmark.crossref.org/dialog/?doi=10.30845/ijhss.v15p33" 
+        target="_blank" 
+        style="
+            display: inline-flex;
+            align-items: center; 
+            padding: 0 10px; 
+            background-color: transparent;
+            text-decoration: none; 
+            border: none;
+            
+            
+            font-family:'Segoe UI', sans-serif !important; 
+            font-size: 13px!important;
+            color: #069!important;
+            font-weight: bold;
+            cursor: pointer;
+        "
+    >
+        <span style="width: 25px; height: 25px; margin-right: 8px;">
+            <img 
+                src="https://crossmark-cdn.crossref.org/widget/v2.0/logos/CROSSMARK_BW_square_no_text.svg" 
+                alt="CrossMark Logo"
+                style="display: block; width: 100%; height: 100%;font-family:'Segoe UI', sans-serif !important;"
+            >
+        </span>
+        
+        Check for Updates
+    </a>
+</div>
+
+<div class="toc-section" style="font-family:'Segoe UI'; font-size:10pt; margin-bottom:25px;margin-top:0px;">
+<div style="border-bottom:1px solid #ddd; padding:20px 0; color:#000; text-align:center;">
+<a href="https://doi.org/10.30845/ijhss.v15p33" 
+style="text-decoration:none; color:#069!important; font-family:'Segoe UI' !important;font-size:10pt !important ; text-align:center!important;font-weight: 500;">https://doi.org/10.30845/ijhss.v15p33</a>
+</div>
+
+
+
+
+
+<div class="main-section" style="
+    font-family:'Segoe UI', sans-serif; 
+    padding: 0; 
+    margin-top: 20px;
+">
+     
+    <div style="
+    font-size: 10pt; /* Slightly larger than 11pt */
+    color: #006699; /* Dark Blue Header Color */
+    font-weight: bold; 
+    display: block; 
+    margin-bottom: 15px; /* Increased space below the line */
+    padding-bottom: 5px; /* Space between text and line */
+">
+    Reviewer(s)
+</div>
+     
+    <div style="
+        background: #f8f8f8; /* Very Light Gray/Off-White Background */
+        padding: 15px; 
+        border-radius: 6px; 
+        margin-bottom: 15px;
+        line-height: 1.5;
+        font-size: 10pt; /* Adjusted to 10pt for readability */
+        color: #333333;
+    ">
+        <strong style="font-size: 10pt;">Dr. Ibrahim Mohammad Hammad</strong>
+        <span style="display: block; margin-top: 4px;">Department of Pathology Microbiology and Forensic Medicine,
+School of Medicine, the University of Jordan</span>
+        <span style="display: block; margin-top: 8px;">
+            Email: 
+            <a href="mailto:i.hammad@ju.edu.jo." style="color: #069!important; text-decoration: none; font-weight: 400; font-family:'Segoe UI'!important; font-size: 10pt!important;">i.hammad@ju.edu.jo.</a>
+        </span>
+    </div>
+     
+    <div style="
+        background: #f8f8f8; 
+        padding: 15px; 
+        border-radius: 6px; 
+        margin-bottom: 0;
+        line-height: 1.5;
+        font-size: 10pt;
+        color: #333333;
+    ">
+        <strong style="font-size: 10pt;">Dr. Lawrence Adhowhoarie Oboma</strong>
+        <span style="display: block; margin-top: 4px;">Department of Pathology Microbiology and Forensic Medicine,
+School of Medicine, the University of Jordan</span>
+        <span style="display: block; margin-top: 8px;">
+            ORCID iD: 
+            <a href="https://orcid.org/0009-0002-0078-6157" target="_blank" style="color: #069!important; text-decoration: none; font-weight: 400; font-family:'Segoe UI'!important; font-size: 10pt!important;">https://orcid.org/0009-0002-0078-6157</a>
+        </span>
+        <span style="display: block; margin-top: 4px;">
+            Email: 
+            <a href="mailto:itxlawsobo@gmail.com." style="color: #069!important; text-decoration: none; font-weight: 400; font-family:'Segoe UI'!important; font-size: 10pt!important;">itxlawsobo@gmail.com.</a>
+        </span>
+    </div>
+
+</div>
+
+<!-- Cite this Article Section -->
+<div style="margin-top:30px; font-family:'Segoe UI'; font-size:10pt; line-height:1.6;">
+
+  <!-- Title -->
+  <div style="font-weight:bold; margin-bottom:15px; font-size:10pt; color: #006699;">
+    Cite this Article
+  </div>
+  
+  <!-- Format Buttons -->
+  <div id="citeOptions" style="margin-bottom:15px; display:flex; gap:8px; flex-wrap:wrap;">
+    <button class="cite-option" data-style="APA">APA</button>
+    <button class="cite-option" data-style="MLA">MLA</button>
+    <button class="cite-option" data-style="Chicago">Chicago</button>
+    <button class="cite-option" data-style="Harvard">Harvard</button>
+    <button class="cite-option" data-style="Vancouver">Vancouver</button>
+  </div>
+</div>
+
+<!-- Citation Modal -->
+<div id="citeModal" class="modal" 
+     style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; 
+            height:100%; overflow:auto; background-color:rgba(0,0,0,0.4);">
+  <div class="modal-content" 
+       style="margin:10% auto; width:600px; padding:20px; background:#fff; 
+              border-radius:8px; position:relative; font-family:'Segoe UI'; font-size:10pt; line-height:1.6;">
+    
+    <!-- Close Button -->
+    <span class="close" 
+          style="float:right; font-size:20px; cursor:pointer;">&times;</span>
+    
+    <h3 style="margin-top:0; font-size:10pt;">Citation</h3>
+
+    <!-- Citation Output -->
+    <div id="citationBox" 
+         style="border:1px solid #ddd; padding:10px; 
+                border-radius:5px; margin-top:10px;">
+      <div id="citationText" style="margin-bottom:10px; font-size:10pt;"></div>
+      <button id="copyBtn" 
+              style="background:#28a745; color:#fff; border:none; padding:5px 10px; 
+                     border-radius:4px; cursor:pointer; font-size:9pt;">
+        Copy
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
+<script>
+  const citations = {
+    APA: `Hadidi, et al. (2025). Knowledge and attitude towards doping among university students in Jordan. <em>International Journal of Humanities and Social Science, 15</em>, 378–389. https://doi.org/10.30845/ijhss.v15p33`,
+    MLA: `Hadidi, et al. "Knowledge and Attitude Towards Doping Among University Students in Jordan." <em>International Journal of Humanities and Social Science</em>, vol. 15, 2025, pp. 378–389. https://doi.org/10.30845/ijhss.v15p33`,
+    Chicago: `Hadidi, et al. "Knowledge and Attitude Towards Doping Among University Students in Jordan." <em>International Journal of Humanities and Social Science</em> 15 (2025): 378–389. https://doi.org/10.30845/ijhss.v15p33`,
+    Harvard: `Hadidi, et al., 2025. Knowledge and attitude towards doping among university students in Jordan. <em>International Journal of Humanities and Social Science</em>, 15, pp.378–389. https://doi.org/10.30845/ijhss.v15p33`,
+    Vancouver: `Hadidi et al. Knowledge and attitude towards doping among university students in Jordan. <em>International Journal of Humanities and Social Science</em>. 2025;15:378–389. https://doi.org/10.30845/ijhss.v15p33`
+  };
+
+  const citeOptions = document.querySelectorAll(".cite-option");
+  const modal = document.getElementById("citeModal");
+  const closeBtn = modal.querySelector(".close");
+  const citationText = document.getElementById("citationText");
+  const copyBtn = document.getElementById("copyBtn");
+
+  // Style buttons small
+  citeOptions.forEach(btn => {
+    btn.style.cssText = "padding:2px 6px; font-size:8pt; border:1px solid #006699; background:#f8f9fa; border-radius:3px; cursor:pointer; font-family:'Segoe UI'!important; color:#006699; white-space:nowrap;";
+    btn.addEventListener("click", () => {
+      const style = btn.getAttribute("data-style");
+      citationText.innerHTML = citations[style];
+      modal.style.display = "block";
+    });
+  });
+
+  // Close modal
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (event) => { if(event.target == modal){ modal.style.display = "none"; } };
+
+  // Copy to clipboard
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(citationText.innerText).then(() => {
+      copyBtn.textContent = "Copied!";
+      setTimeout(() => { copyBtn.textContent = "Copy"; }, 2000);
+    });
+  });
+</script>
+
+ <!-- Article Metrics Section -->
+<div class="main-section">
+  <span style="display:block; text-align:left; margin-bottom:10px; font-family:'Segoe UI'; font-size:10pt; line-height:1.4; font-weight: bold; margin-top:30px;">
+    Article Metrics (Citations):
+  </span>
+  <div style="display:block; text-align:left; margin-bottom:0; font-family:'Segoe UI'; font-size:10pt; line-height:1.4;">
+    For the most up-to-date citation information for this article, please refer to 
+     
+     <a href="javascript:void(0);" target="_blank" 
+   style="font-size:10pt!important; font-family:'Segoe UI' !important; color:#069!important;">
+   Google Scholar
+</a>
+
+  <p style="font-family: 'Segoe UI'; font-size:9pt; color:#555555; font-style:italic; margin:5px 0;">
+    Note: Citation statistics will only be available once the article is indexed in Google Scholar.
+  </p>
+  </div>
+</div>
+
+
+<!-- Share This Article Section -->
+<div class="toc-section" style="font-family:'Segoe UI'; font-size:10pt;margin-top:25px;">
+  <div style="font-weight:bold; border-top:1px solid #ddd; padding-top:20px; padding-bottom:6px; color:#006699;">
+    Share This Article
+  </div>
+
+  <div style="margin-top:12px;margin-bottom:20px; display:flex; gap:20px; flex-wrap:wrap;">
+
+    <!-- Email -->
+   <a href="https://mail.google.com/mail/?view=cm&fs=1&to=&su=Interesting%20Article&body=I%20thought%20you%20might%20find%20this%20article%20interesting:%0Ahttps://doi.org/10.30845/ijhss.v15p33" target="_blank">
+  <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email" style="width:18px; height:18px;">
+</a>
+
+    <!-- Facebook -->
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https://doi.org/10.30845/ijhss.v15p33" target="_blank">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" style="width:18px; height:18px;">
+    </a>
+
+    <!-- Twitter (X) -->
+    <a href="https://twitter.com/intent/tweet?url=https://doi.org/10.30845/ijhss.v15p33" target="_blank">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="Twitter" style="width:18px; height:18px;">
+    </a>
+
+    <!-- Instagram -->
+    <a href="https://www.instagram.com/?url=https://doi.org/10.30845/ijhss.v15p33" target="_blank">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="width:18px; height:18px;">
+    </a>
+
+    <!-- LinkedIn -->
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://doi.org/10.30845/ijhss.v15p33" target="_blank">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" style="width:18px; height:18px;">
+    </a>
+
+    <!-- WhatsApp -->
+    <a href="https://api.whatsapp.com/send?text=https://doi.org/10.30845/ijhss.v15p33" target="_blank">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" alt="WhatsApp" style="width:18px; height:18px;">
+    </a>
+
+    <!-- Messenger -->
+    <a href="fb-messenger://share?link=https://doi.org/10.30845/ijhss.v15p33" target="_blank">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/messenger.svg" alt="Messenger" style="width:18px; height:18px;">
+    </a>
+
+  </div>
+</div>
+
+
+
+<!-- Table of Contents -->
+<div class="toc-section" style="font-family:'Segoe UI'; font-size:10pt; margin-bottom:15px;margin-top:10px;">
+  <div style="font-weight:bold; border-top:1px solid #ddd; border-bottom:1px solid #ddd; padding:20px 0; color:#006699;">
+    Table of Contents
+  </div>
+  <ul style="list-style:none; padding-left:0; margin-top:5px; color:#6F6F6F;">
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#abstract" style="text-decoration:none; color:#6F6F6F; font-family:'Segoe UI' !important;font-size:10pt !important ;">Abstract</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#Background" style="text-decoration:none; color:#6F6F6F; font-family:'Segoe UI' !important;font-size:10pt !important ; ">1. Background</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#Materials and Methods" style="text-decoration:none; color:#6F6F6F; font-family:'Segoe UI' !important;font-size:10pt !important ; ">2. Materials and Methods</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#Results" style="text-decoration:none; color:#6F6F6F;font-family:'Segoe UI' !important;font-size:10pt !important ; ">3. Results</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#Discussion" style="text-decoration:none; color:#6F6F6F; font-family:'Segoe UI' !important;font-size:10pt !important ; ">4. Discussion</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#Conclusions" style="text-decoration:none; color:#6F6F6F;font-family:'Segoe UI' !important;font-size:10pt !important ; ">5. Conclusions</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#References" style="text-decoration:none; color:#6F6F6F; font-family:'Segoe UI' !important;font-size:10pt !important ; ">Referencess</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#Conflict of Interest" style="text-decoration:none; color:#6F6F6F; font-family:'Segoe UI' !important;font-size:10pt !important ; ">Conflict of Interest</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#Ethical Approval" style="text-decoration:none; color:#6F6F6F; font-family:'Segoe UI' !important;font-size:10pt !important ; ">Ethical Approval</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#Funding" style="text-decoration:none; color:#6F6F6F; font-family:'Segoe UI' !important;font-size:10pt !important ; ">Funding</a>
+    </li>
+    <li style="padding:10px 0; border-bottom:1px solid #ddd;">
+      <a href="#Author Biography" style="text-decoration:none; color:#6F6F6F; font-family:'Segoe UI' !important;font-size:10pt !important ; ">Author Biography</a>
+    </li>
+  </ul>
+</div>
+
+</div>
+  </div>
+  
+  
+  
+</section>
+
+
+
+
+
+</head>
+
+
+</html>
+
+
+
+  </article>
+
+  </aside>
+</section>
+
+
+
+</body>
+</html>
