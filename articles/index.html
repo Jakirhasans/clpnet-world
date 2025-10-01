@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Articles - Frontiers Style</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* CSS Variables & Global Styles */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #0088aa; /* Frontiers Teal/Blue Accent */
+            --text-dark: #333;
+            --text-light: #fff;
+            --bg-white: #fff;
+            --bg-light-gray: #f9f9f9;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--secondary-color);
+        }
+        
+        /* HERO/SEARCH SECTION (Matching Screenshot_2.jpg top bar) */
+        .search-hero {
+            background-color: var(--bg-white);
+            padding: 20px 0 50px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-box-large {
+            max-width: 900px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px 15px;
+            background-color: var(--bg-light-gray);
+        }
+
+        .search-box-large i {
+            color: #777;
+            margin-right: 10px;
+        }
+
+        .search-box-large input {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            font-size: 1.1em;
+            outline: none;
+        }
+
+        .article-count-title {
+            font-size: 2.2em;
+            color: var(--text-dark);
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        /* FILTER TABS (Matching Screenshot_2.jpg) */
+        .filter-tabs {
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .filter-tabs button {
+            background: none;
+            border: none;
+            padding: 10px 0;
+            cursor: pointer;
+            font-size: 1em;
+            color: #777;
+            font-weight: 600;
+            transition: color 0.2s, border-bottom 0.2s;
+        }
+
+        .filter-tabs button.active {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        /* FILTER DROPDOWNS */
+        .filter-dropdowns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-dropdowns select {
+            padding: 8px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--bg-white);
+            font-size: 0.95em;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+
+        /* ARTICLE GRID (The main content area) */
+        .article-grid {
+            padding: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* INDIVIDUAL ARTICLE CARD (Matching Screenshot_2.jpg design) */
+        .article-card {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 5px;
+            min-height: 250px; /* Consistent height for grid view */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: box-shadow 0.2s;
+        }
+
+        .article-card:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .article-type {
+            font-size: 0.8em;
+            color: var(--secondary-color);
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .article-publish-date {
+            font-size: 0.8em;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .article-title {
+            font-size: 1.1em;
+            color: var(--text-dark);
+            font-weight: bold;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .article-title:hover {
+            color: var(--secondary-color);
+        }
+
+        .article-authors {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .article-footer-meta {
+            margin-top: auto; /* Push metadata to the bottom */
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .article-footer-meta .journal-name {
+            font-size: 0.85em;
+            font-style: italic;
+            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .article-footer-meta .doi-link {
+            font-size: 0.8em;
+            color: #999;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .article-footer-meta .views {
+            font-size: 0.8em;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .article-count-title {
+                font-size: 1.8em;
+            }
+            .article-grid {
+                grid-template-columns: 1fr;
+            }
+            .search-box-large {
+                padding: 8px 10px;
+            }
+            .filter-dropdowns {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <section class="search-hero">
+            <div class="search-box-large">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Enter a keyword or subject to search">
+            </div>
+
+            <p class="article-count-title">8 articles</p>
+            
+            <div class="filter-tabs">
+                <button class="active">Most recent</button>
+                <button>Most viewed</button>
+                <button>Most cited</button>
+            </div>
+            
+            <div class="filter-dropdowns">
+                <select>
+                    <option>Domains</option>
+                    <option>Science & Tech</option>
+                    <option>Humanities</option>
+                </select>
+                <select>
+                    <option>Journals</option>
+                    <option>J. Business</option>
+                    <option>J. Health</option>
+                </select>
+                <select>
+                    <option>Sections</option>
+                    <option>Editorial</option>
+                    <option>Original Research</option>
+                </select>
+                <select>
+                    <option>Type</option>
+                    <option>Review Article</option>
+                    <option>Case Study</option>
+                </select>
+                <select>
+                    <option>Date</option>
+                    <option>Past 1 Year</option>
+                    <option>All Time</option>
+                </select>
+                <select>
+                    <option>Part of Research Topics</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="article-grid">
+
+            <div class="article-card">
+                <div>
+                    <div class="article-type">Original Research</div>
+                    <div class="article-publish-date">Published on 01 Oct 2025</div>
+                    <a href="https://clpnet.world/paper1.html" class="article-title">Knowledge and Attitude Towards Doping Among University Students in Jordan</a>
+                    <div class="article-authors">Kamal A. Hadidi, Suhad M. Khasawneh, Raghad M. Bani Hamad, Hiba Z. Janbek, Amwaj A. Al- Farajat, Rufayda H. Alamaireh, Zena U. Al-ani, Farah E. Alazizi, Akram K. Alhadidi, and Abdulrahman E. Alhanbali</div>
+                </div>
+                <div class="article-footer-meta">
+                    <span class="journal-name">International Journal of Humanities and Social Science</span>
+                    <span class="doi-link">https://doi.org/10.30845/ijhss.v15p33</span>
+                    <span class="views">591 views</span>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div>
+                    <div class="article-type">Review Article</div>
+                    <div class="article-publish-date">Published on 28 Sep 2025</div>
+                    <a href="#" class="article-title">Reviewing Global Supply Chain Resilience Post-Pandemic: Lessons for Emerging Markets</a>
+                    <div class="article-authors">N. Akter · R. Hassan</div>
+                </div>
+                <div class="article-footer-meta">
+                    <span class="journal-name">Frontiers in Emerging Economies</span>
+                    <span class="doi-link">doi 10.3389/fee.2025.1058201</span>
+                    <span class="views">328 views</span>
+                </div>
+            </div>
+            
+            <div class="article-card">
+                <div>
+                    <div class="article-type">Original Research</div>
+                    <div class="article-publish-date">Published on 25 Sep 2025</div>
+                    <a href="#" class="article-title">Preliminary Findings on Telemedicine Adoption in Rural Bangladesh and User Satisfaction</a>
+                    <div class="article-authors">K. Haque · Z. Rahman · B. Ali</div>
+                </div>
+                <div class="article-footer-meta">
+                    <span class="journal-name">Frontiers in Public Health</span>
+                    <span class="doi-link">doi 10.3389/fph.2025.1823855</span>
+                    <span class="views">496 views</span>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div>
+                    <div class="article-type">Systematic Review</div>
+                    <div class="article-publish-date">Published on 22 Sep 2025</div>
+                    <a href="#" class="article-title">Efficacy, immunogenicity, and safety of pneumococcal conjugate vaccine in children: a systematic review and meta-analysis</a>
+                    <div class="article-authors">Qin Dai · Yujie Dong · Jing Wu · Qian Peng</div>
+                </div>
+                <div class="article-footer-meta">
+                    <span class="journal-name">Frontiers in Pediatrics</span>
+                    <span class="doi-link">doi 10.3389/fped.2025.1652946</span>
+                    <span class="views">591 views</span>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div>
+                    <div class="article-type">Original Research</div>
+                    <div class="article-publish-date">Published on 18 Sep 2025</div>
+                    <a href="#" class="article-title">Adverse events of the thyroid peroxidase inhibitor methimazole in the treatment of hyperthyroidism</a>
+                    <div class="article-authors">Yixin Sun · Shuai Wang · Xu Zhou</div>
+                </div>
+                <div class="article-footer-meta">
+                    <span class="journal-name">Frontiers in Endocrinology</span>
+                    <span class="doi-link">doi 10.3389/fendo.2025.1058201</span>
+                    <span class="views">328 views</span>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div>
+                    <div class="article-type">Review</div>
+                    <div class="article-publish-date">Published on 15 Sep 2025</div>
+                    <a href="#" class="article-title">Cell-free mitochondrial DNA as a pro-inflammatory agent in blood circulation: mechanisms, therapeutic implications</a>
+                    <div class="article-authors">Yangguang Zhao · Chunlei Wu · Xiaoxue Liang · Meiyuan Yang</div>
+                </div>
+                <div class="article-footer-meta">
+                    <span class="journal-name">Frontiers in Immunology</span>
+                    <span class="doi-link">doi 10.3389/fimmu.2025.16540748</span>
+                    <span class="views">101 views</span>
+                </div>
+            </div>
+            
+            <div class="article-card">
+                <div>
+                    <div class="article-type">Original Research</div>
+                    <div class="article-publish-date">Published on 10 Sep 2025</div>
+                    <a href="#" class="article-title">A Novel Method for Soil Salinity Measurement Using Low-Cost Drone Imagery in Coastal Areas</a>
+                    <div class="article-authors">P. Barua · M. Reza · T. Das</div>
+                </div>
+                <div class="article-footer-meta">
+                    <span class="journal-name">Frontiers in Environmental Science</span>
+                    <span class="doi-link">doi 10.3389/fenvs.2025.1124578</span>
+                    <span class="views">780 views</span>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div>
+                    <div class="article-type">Case Study</div>
+                    <div class="article-publish-date">Published on 05 Sep 2025</div>
+                    <a href="#" class="article-title">The Success Story of a Garment Factory Implementing Green Supply Chain Management in Dhaka</a>
+                    <div class="article-authors">D. Sarker · M. Hossain</div>
+                </div>
+                <div class="article-footer-meta">
+                    <span class="journal-name">Frontiers in Sustainable Business</span>
+                    <span class="doi-link">doi 10.3389/fsbus.2025.1567890</span>
+                    <span class="views">256 views</span>
+                </div>
+            </div>
+        </section>
+        
+        <div style="text-align: center; padding: 40px 0;">
+            <button style="background-color: var(--secondary-color); color: var(--text-light); border: none; padding: 12px 35px; border-radius: 5px; font-size: 1em; cursor: pointer; font-weight: bold;"><i class="fas fa-plus-circle"></i> Load more articles</button>
+        </div>
+
+    </div>
+
+</body>
+</html>
