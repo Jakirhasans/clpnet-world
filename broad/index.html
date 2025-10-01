@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontiers-Style Journal Home Page</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+<style>
+
+/* Global Reset and Utility */
+:root {
+    --primary-color: #007bff; /* Blue for primary accents */
+    --secondary-color: #0088aa; /* Frontiers-like teal/blue accent */
+    --text-dark: #333;
+    --text-light: #fff;
+    --bg-white: #fff;
+    --bg-light-gray: #f4f4f4;
+    --footer-bg: #e6e6e6; /* Light gray for footer background */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-light-gray);
+    color: var(--text-dark);
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+    color: var(--secondary-color);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* HEADER STYLES (Frontiers Exact Structure) */
+.main-header {
+    background-color: var(--bg-white);
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.main-nav ul {
+    display: flex;
+}
+
+.main-nav li a {
+    color: var(--text-dark);
+    padding: 10px 15px;
+    display: block;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+}
+
+.btn-submit {
+    background-color: var(--secondary-color);
+    color: var(--text-light);
+    padding: 8px 15px;
+    border-radius: 20px;
+    margin-right: 10px;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 0.9em;
+    color: var(--text-dark);
+    cursor: pointer;
+    margin-left: 15px;
+    padding: 5px;
+}
+
+/* HERO SECTION STYLES */
+.hero-section {
+    position: relative;
+    /* CHANGE THIS: Replace with your image link */
+    background: url('https://images.pexels.com/photos/746386/pexels-photo-746386.jpeg') no-repeat center center/cover;
+    height: 70vh; 
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+}
+
+.hero-overlay {
+    background-color: rgba(0, 0, 0, 0.3);
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    padding-bottom: 100px; 
+}
+
+.hero-content h1 {
+    font-size: 3.5em;
+    margin: 0 0 10px;
+    max-width: 600px;
+    font-weight: 700;
+}
+
+.hero-content p {
+    font-size: 1.1em;
+    max-width: 600px;
+    margin-bottom: 40px;
+}
+
+.stats-panel {
+    display: flex;
+    gap: 50px;
+    margin-top: 30px;
+    padding-top: 20px;
+    font-size: 1em;
+}
+
+.stat-item strong {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+.stat-item span {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+/* AUDIENCE TABS STYLES */
+.tabs-container {
+    position: relative;
+    z-index: 10;
+    transform: translateY(50%); 
+}
+
+.audience-tabs {
+    background-color: var(--bg-white);
+    display: inline-flex;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-left: 50px; 
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-dark);
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 0.95em;
+}
+
+.tab-btn.active {
+    background-color: var(--text-dark); 
+    color: var(--text-light);
+    border-radius: 25px;
+}
+
+/* CONTENT SECTIONS */
+.subject-discovery, .latest-articles {
+    padding: 40px 0;
+    background-color: var(--bg-white);
+}
+
+.subject-container {
+    padding-top: 50px; 
+}
+
+.section-title {
+    font-size: 2em;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.subject-grid {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.subject-card {
+    width: 19.2%;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.subject-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.subject-card:hover img {
+    transform: scale(1.05);
+}
+
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: var(--text-light);
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.article-list {
+    margin-top: 20px;
+}
+.article-list p {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+.article-list a {
+    color: var(--text-dark);
+}
+
+/* FOOTER STYLES (Frontiers Exact Structure) */
+.main-footer {
+    background-color: var(--footer-bg);
+    padding: 40px 0;
+    color: var(--text-dark);
+    border-top: 2px solid var(--secondary-color); /* Highlight line */
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr; /* Custom grid layout */
+    gap: 30px;
+}
+
+.footer-col h4 {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.footer-col ul li {
+    margin-bottom: 8px;
+}
+
+.footer-col ul li a {
+    color: #555;
+    font-size: 0.9em;
+    transition: color 0.3s;
+}
+
+.footer-col ul li a:hover {
+    color: var(--secondary-color);
+}
+
+.footer-logo {
+    font-size: 1.8em;
+    font-weight: 900;
+    color: var(--secondary-color);
+    display: block;
+    margin-bottom: 10px;
+}
+
+.copyright-text {
+    font-size: 0.8em;
+    color: #777;
+}
+
+.social-links a {
+    color: var(--secondary-color);
+    font-size: 1.4em;
+    margin-right: 15px;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: var(--text-dark);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 992px) {
+    .subject-card {
+        width: 31%; 
+    }
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-content {
+        flex-wrap: wrap;
+    }
+    .main-nav {
+        order: 3;
+        width: 100%;
+        margin-top: 5px;
+    }
+    .main-nav ul {
+        justify-content: center;
+    }
+    .nav-actions {
+        order: 2;
+        margin-top: 5px;
+    }
+    .btn-submit {
+        display: none; 
+    }
+    .hero-content h1 {
+        font-size: 2.5em;
+    }
+    .stats-panel {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .tabs-container {
+        transform: translateY(0);
+        margin-top: 20px;
+    }
+    .audience-tabs {
+        flex-direction: column;
+        width: 100%;
+        margin-left: 0;
+        border-radius: 5px;
+    }
+    .subject-card {
+        width: 48%; 
+    }
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .logo-section {
+        order: 4;
+    }
+    .social-col {
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .subject-card {
+        width: 100%;
+    }
+}    
+    
+</style>    
+    
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container nav-content">
+            <div class="logo">
+                <a href="#">BROAD</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#">About us <i class="fas fa-caret-down"></i></a></li>
+                    <li><a href="#">All journals</a></li>
+                    <li><a href="#">All articles</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <a href="#" class="btn-submit">Submit your research</a>
+                <button class="icon-btn"><i class="fas fa-search"></i> Search</button>
+                <button class="icon-btn"><i class="fas fa-user"></i> Login</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-overlay">
+            <div class="container hero-content">
+                <h1>Where scientists empower society</h1>
+                <p>Creating solutions for healthy lives on a healthy planet</p>
+                
+                <div class="stats-panel">
+                    <div class="stat-item">
+                        <strong>3 million</strong>
+                        <span>researchers</span>
+                    </div>
+                    <div class="stat-item">
+                        <strong>4 billion</strong>
+                        <span>article views and downloads</span>
+                    </div>
+                    <div class="stat-item">
+                        <strong>12 million</strong>
+                        <span>citations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container tabs-container">
+            <div class="audience-tabs">
+                <button class="tab-btn active">Authors</button>
+                <button class="tab-btn">Editors and reviewers</button>
+                <button class="tab-btn">Collaborators</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="subject-discovery">
+        <div class="container subject-container">
+            <h2 class="section-title">Discover Our Research Fields</h2>
+            <div class="subject-grid">
+                <div class="subject-card">
+                    <img src="https://via.placeholder.com/200x200?text=Marine" alt="Marine Life">
+                    <div class="card-overlay">Marine Life</div>
+                </div>
+                <div class="subject-card">
+                    <img src="https://via.placeholder.com/200x200?text=Agri" alt="Agricultural Science">
+                    <div class="card-overlay">Agricultural Science</div>
+                </div>
+                <div class="subject-card">
+                    <img src="https://via.placeholder.com/200x200?text=Engine" alt="Engineering">
+                    <div class="card-overlay">Engineering</div>
+                </div>
+                <div class="subject-card">
+                    <img src="https://via.placeholder.com/200x200?text=Health" alt="Health and Medicine">
+                    <div class="card-overlay">Health and Medicine</div>
+                </div>
+                <div class="subject-card">
+                    <img src="https://via.placeholder.com/200x200?text=Climate" alt="Climate Research">
+                    <div class="card-overlay">Climate Research</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="latest-articles container">
+        <h2 class="section-title">Latest Research Articles</h2>
+        <div class="article-list">
+            <p><a href="#">**[Article Title 1]**</a> - *Journal Name* - Published Today</p>
+            <p><a href="#">**[Article Title 2]**</a> - *Journal Name* - Published Yesterday</p>
+            <p><a href="#">**[Article Title 3]**</a> - *Journal Name* - 2 Days Ago</p>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-col logo-section">
+                <a href="#" class="footer-logo">BROAD</a>
+                <p class="copyright-text">&copy; 2024 Frontiers. All Rights Reserved</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>About BROAD</h4>
+                <ul>
+                    <li><a href="#">Mission</a></li>
+                    <li><a href="#">Publishing policies</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Publish</h4>
+                <ul>
+                    <li><a href="#">Submit a manuscript</a></li>
+                    <li><a href="#">Journals A-Z</a></li>
+                    <li><a href="#">Reviewer Guidelines</a></li>
+                    <li><a href="#">Open Science</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col social-col">
+                <h4>Follow us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
