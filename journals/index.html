@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Journal Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* CSS Variables & Global Styles */
+        :root {
+            --secondary-color: #0088aa; /* Frontiers Teal/Blue Accent */
+            --text-dark: #333;
+            --text-light: #fff;
+            --bg-white: #fff;
+            --bg-light-gray: #f4f4f4;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--secondary-color);
+        }
+
+        /* JOURNAL LIST HERO SECTION (Title, Search, Count) */
+        .list-hero {
+            background-color: var(--bg-light-gray);
+            padding: 50px 0 60px;
+            text-align: center;
+        }
+
+        .list-hero h1 {
+            font-size: 2.8em;
+            color: var(--text-dark);
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .list-hero p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        
+        .search-box {
+            display: flex;
+            max-width: 700px;
+            margin: 0 auto;
+            border: 2px solid var(--secondary-color);
+            border-radius: 30px; /* Rounded corners like Frontiers */
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: var(--bg-white);
+        }
+
+        .search-box input {
+            flex-grow: 1;
+            padding: 14px 20px;
+            border: none;
+            font-size: 1em;
+            outline: none;
+        }
+
+        .search-box button {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            border: none;
+            padding: 10px 30px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.2s;
+        }
+
+        /* Journal List Content */
+        .journal-list-content {
+            padding: 40px 0;
+        }
+
+        .category-header {
+            font-size: 1.8em;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 5px;
+            margin-top: 50px;
+            margin-bottom: 25px;
+        }
+        
+        .journal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .journal-card {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-top: 5px solid var(--secondary-color); /* Top accent border */
+            border-radius: 5px;
+            padding: 20px;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: box-shadow 0.2s;
+        }
+
+        .journal-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .journal-card h3 {
+            font-size: 1.3em;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .journal-card h3 a {
+            color: var(--text-dark);
+            font-weight: bold;
+        }
+
+        .journal-card h3 a:hover {
+            color: var(--secondary-color);
+        }
+
+        .journal-card .subject-tag {
+            display: inline-block;
+            background-color: #e0f7fa;
+            color: #0088aa;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-top: 10px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .list-hero h1 {
+                font-size: 2em;
+            }
+            .search-box {
+                flex-direction: column;
+                border-radius: 5px;
+            }
+            .search-box button {
+                padding: 10px;
+                font-size: 1em;
+            }
+            .journal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="list-hero">
+        <div class="container">
+            <h1>Browse Our Journal Collection</h1>
+            <p>63 Peer-Reviewed Titles Across Science, Humanities, and Business.</p>
+            <div class="search-box">
+                <input type="text" placeholder="Search by journal title or subject area...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section class="journal-list-content">
+        <div class="container">
+            
+            <h2 class="category-header">Arts, Humanities and Social Science (30 Journals)</h2>
+            <div class="journal-grid">
+                
+                <div class="journal-card">
+                    [cite_start]<h3><a href="https://www.ijhssnet.com/" target="_blank">International Journal of Humanities and Social Science</a></h3> [cite: 3]
+                    <span class="subject-tag">Humanities</span>
+                </div>
+                
+                <div class="journal-card">
+                    [cite_start]<h3><a href="https://jaa.thebrpi.org/" target="_blank">Journal of Anthropology and Archaeology</a></h3> [cite: 3]
+                    <span class="subject-tag">Anthropology</span>
+                </div>
+                
+                <div class="journal-card">
+                    [cite_start]<h3><a href="https://jges.thebrpi.org/" target="_blank">Journal of Geography and Earth Sciences</a></h3> [cite: 3]
+                    <span class="subject-tag">Geography</span>
+                </div>
+                
+                <div class="journal-card">
+                    [cite_start]<h3><a href="https://rhps.thebrpi.org/" target="_blank">Review of History and Political Science</a></h3> [cite: 3]
+                    <span class="subject-tag">History & Politics</span>
+                </div>
+                
+                <div class="journal-card">
+                    [cite_start]<h3><a href="https://jppg.thebrpi.org/" target="_blank">Journal of Power, Politics & Governance</a></h3> [cite: 3]
+                    <span class="subject-tag">Governance</span>
+                </div>
+                
+
+            </div>
+            
+        </div>
+    </section>
+
+</body>
+</html>
