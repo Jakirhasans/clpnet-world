@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Articles - Frontiers Style</title>
+    <title>All Articles - Frontiers Style with Pagination</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -219,6 +219,45 @@
                 flex-direction: column;
             }
         }
+        
+        /* PAGINATION STYLES (New Section) */
+        .pagination-container {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .pagination {
+            display: inline-flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: var(--bg-white);
+        }
+
+        .pagination-item a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--text-dark);
+            border-left: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+        
+        .pagination-item:first-child a {
+            border-left: none;
+        }
+
+        .pagination-item a:hover {
+            background-color: var(--bg-light-gray);
+        }
+
+        .pagination-item.active a {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -275,7 +314,7 @@
             <div class="article-card">
                 <div>
                     <div class="article-type">Original Research</div>
-                    <div class="article-publish-date">Published on 01 Oct 2025</div>
+                    <div class="article-publish-date">Published on  3 September 2025</div>
                     <a href="https://clpnet.world/paper1.html" class="article-title">Knowledge and Attitude Towards Doping Among University Students in Jordan</a>
                     <div class="article-authors">Kamal A. Hadidi, Suhad M. Khasawneh, Raghad M. Bani Hamad, Hiba Z. Janbek, Amwaj A. Al- Farajat, Rufayda H. Alamaireh, Zena U. Al-ani, Farah E. Alazizi, Akram K. Alhadidi, and Abdulrahman E. Alhanbali</div>
                 </div>
@@ -385,8 +424,17 @@
             </div>
         </section>
         
-        <div style="text-align: center; padding: 40px 0;">
-            <button style="background-color: var(--secondary-color); color: var(--text-light); border: none; padding: 12px 35px; border-radius: 5px; font-size: 1em; cursor: pointer; font-weight: bold;"><i class="fas fa-plus-circle"></i> Load more articles</button>
+        <div class="pagination-container">
+            <ul class="pagination">
+                <li class="pagination-item"><a href="#" aria-label="First Page"><i class="fas fa-angle-double-left"></i></a></li>
+                <li class="pagination-item"><a href="#" aria-label="Previous Page"><i class="fas fa-angle-left"></i></a></li>
+                <li class="pagination-item active"><a href="#">1</a></li>
+                <li class="pagination-item"><a href="#">2</a></li>
+                <li class="pagination-item"><a href="#">3</a></li>
+                <li class="pagination-item"><a href="#">4</a></li>
+                <li class="pagination-item"><a href="#" aria-label="Next Page"><i class="fas fa-angle-right"></i></a></li>
+                <li class="pagination-item"><a href="#" aria-label="Last Page"><i class="fas fa-angle-double-right"></i></a></li>
+            </ul>
         </div>
 
     </div>
